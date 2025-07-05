@@ -52,3 +52,4 @@ bun run test       # Run tests with Vitest
 - Strict mode enabled
 - Target: ES2022
 - No emit (Vite handles compilation)
+

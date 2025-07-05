@@ -5,12 +5,13 @@ import {
   VaultIcon,
 } from "@phosphor-icons/react";
 import GlassCard, { GlassCardContent, GlassCardTitle } from "./GlassCard";
+import UnicornScene from "./UnicornScene";
 
 export default function FeaturesSection() {
   return (
     <section className="container-2xl py-20 flex flex-col ">
       <div className="flex">
-        <GlassCard className="md:w-1/2 ">
+        <GlassCard className="lg:w-1/2 ">
           <GlassCardTitle>Crypto's fairest orderbook</GlassCardTitle>
           <GlassCardContent>
             <p>
@@ -26,9 +27,21 @@ export default function FeaturesSection() {
             </p>
           </GlassCardContent>
         </GlassCard>
+        <div className="w-1/2 flex items-center justify-center">
+          <UnicornScene
+            projectId="rU2x4bWOA1sTDCVnhmet?production=true"
+            className="h-40 w-40"
+          />
+        </div>
       </div>
-      <div className="flex justify-end">
-        <GlassCard className="w-1/2">
+      <div className="flex">
+        <div className="w-1/2 flex items-center justify-center">
+          <UnicornScene
+            projectId="bB99NzQj1kIAtcr5OVvP?production=true"
+            className="h-40 w-40"
+          />
+        </div>
+        <GlassCard className="lg:w-1/2 shrink-0">
           <GlassCardTitle>Modular sequencing</GlassCardTitle>
           <GlassCardContent>
             <p>
@@ -51,7 +64,7 @@ export default function FeaturesSection() {
       </div>
 
       <div className="flex">
-        <GlassCard className="md:w-1/2">
+        <GlassCard className="lg:w-1/2">
           <GlassCardTitle>Fermi's liquidity layer</GlassCardTitle>
           <GlassCardContent>
             <p>
@@ -75,6 +88,12 @@ export default function FeaturesSection() {
             </div>
           </GlassCardContent>
         </GlassCard>
+        <div className="w-1/2 flex items-center justify-center">
+          <UnicornScene
+            projectId="63ON74BtloYSYdehHwTw?production=true"
+            className="h-40 w-40"
+          />
+        </div>
       </div>
     </section>
   );
