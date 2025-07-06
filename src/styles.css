@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-
 @theme {
   --font-sans: "Arimo", sans-serif;
   --font-display: "Instrument Serif", serif;
@@ -19,26 +18,32 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-button , a {
+button,
+a {
   cursor: pointer;
 }
 
+#app {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+}
 @layer base {
-  body{
+  html,
+  body {
     @apply bg-dark-forest text-rock;
   }
 }
 
 @layer components {
   .glass-card {
-    @apply border border-white/25 backdrop-brightness-80 backdrop-blur-md
+    @apply backdrop-brightness-80 backdrop-blur-md;
   }
 }
 
 @layer utilities {
   .container-2xl {
-    @apply container mx-auto max-w-screen-2xl px-2 md:px-4;
+    @apply container mx-auto max-w-screen-2xl;
   }
 }
-
-

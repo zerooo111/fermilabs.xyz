@@ -1,6 +1,5 @@
 import {
   FediverseLogoIcon,
-  GearSixIcon,
   HandArrowUpIcon,
   VaultIcon,
 } from "@phosphor-icons/react";
@@ -9,9 +8,9 @@ import UnicornScene from "./UnicornScene";
 
 export default function FeaturesSection() {
   return (
-    <section className="container-2xl py-20 flex flex-col ">
-      <div className="flex">
-        <GlassCard className="lg:w-1/2 ">
+    <section className="flex flex-col divide-y divide-rock/20 mt-40 border-y border-rock/20">
+      <div className="flex divide-x divide-rock/20">
+        <GlassCard className="lg:w-1/2">
           <GlassCardTitle>Crypto's fairest orderbook</GlassCardTitle>
           <GlassCardContent>
             <p>
@@ -34,7 +33,7 @@ export default function FeaturesSection() {
           />
         </div>
       </div>
-      <div className="flex">
+      <div className="flex divide-x divide-rock/20">
         <div className="w-1/2 flex items-center justify-center">
           <UnicornScene
             projectId="bB99NzQj1kIAtcr5OVvP?production=true"
@@ -63,7 +62,7 @@ export default function FeaturesSection() {
         </GlassCard>
       </div>
 
-      <div className="flex">
+      <div className="flex divide-x divide-rock/20">
         <GlassCard className="lg:w-1/2">
           <GlassCardTitle>Fermi's liquidity layer</GlassCardTitle>
           <GlassCardContent>
@@ -73,15 +72,15 @@ export default function FeaturesSection() {
             </p>
             <p>So far, three protocols are integrated:</p>
             <div className="flex flex-col gap-4 mt-6 font-display text-4xl">
-              <div className="glass-card p-4 bg-dark-forest/50 flex items-center gap-4">
+              <div className="glass-card p-4 shadow-xl border border-rock/30 bg-dark-forest/50 flex items-center gap-4">
                 <HandArrowUpIcon weight="duotone" size={32} />
                 Lendings platform
               </div>
-              <div className="glass-card p-4  bg-dark-forest/50 flex items-center gap-4">
+              <div className="glass-card p-4 shadow-xl border border-rock/30   bg-dark-forest/50 flex items-center gap-4">
                 <VaultIcon size={32} />
                 Market-making vault
               </div>
-              <div className="glass-card p-4 bg-dark-forest/50 flex items-center gap-4">
+              <div className="glass-card p-4 shadow-xl  border border-rock/30 bg-dark-forest/50 flex items-center gap-4">
                 <FediverseLogoIcon size={32} />
                 Decentralized exchange
               </div>

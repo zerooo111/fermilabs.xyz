@@ -3,7 +3,7 @@ export default function ProductScreenshot() {
     <img
       src="/product-screenshot.svg"
       alt="Product Screenshot"
-      className="w-full h-full"
+      className="w-full h-full translate-y-20"
     />
   );
 }

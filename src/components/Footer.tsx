@@ -1,120 +1,72 @@
-import { motion } from "motion/react";
-import { ArrowRightIcon } from "@phosphor-icons/react";
+import { LINKS } from "@/constants";
+import {
+  DiscordLogoIcon,
+  GithubLogoIcon,
+  XLogoIcon,
+} from "@phosphor-icons/react";
+import Copyright from "./Copyright";
 import Logo from "./Logo";
-import StyledLink from "./StyledLink";
 
 export function Footer() {
   return (
-    <footer className="relative mt-16">
-      {/* Gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-dark-forest/50 to-dark-forest" />
-
-      <div className="relative py-16 md:py-24">
-        <div className="container-2xl text-center">
-          {/* Main CTA Section */}
-          <motion.div
-            className="mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="font-display text-4xl lg:text-5xl xl:text-6xl mb-6 leading-tight text-rock">
-              Ready to experience the fastest DEX?
-            </h2>
-            <p className="text-lg md:text-xl text-rock/80 mb-12 max-w-2xl mx-auto">
-              Deploy liquidity, fire off your first trade, or dive into our SDK in minutes.
-            </p>
-
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6">
-              <motion.a
-                href="/beta"
-                className="bg-rock text-dark-forest group px-8 py-4 text-lg md:text-xl font-medium flex items-center gap-4"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                Launch the Beta
-                <ArrowRightIcon
-                  weight="bold"
-                  className="w-5 h-5 group-hover:scale-110 origin-center group-hover:-rotate-45 transition-all duration-200"
-                />
-              </motion.a>
-
-              <motion.a
-                href="https://discord.gg/fermilabs"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-amber-200 group text-dark-forest px-8 py-4 text-lg md:text-xl font-medium flex items-center gap-4"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                Join Discord
-                <ArrowRightIcon
-                  weight="bold"
-                  className="w-5 h-5 group-hover:scale-110 origin-center group-hover:-rotate-45 transition-all duration-200"
-                />
-              </motion.a>
-
-              <motion.a
-                href="/sdk"
-                className="group text-rock ring-1 ring-rock/30 hover:ring-rock/50 bg-transparent hover:bg-rock/10 duration-300 text-lg md:text-xl px-8 py-4 font-medium flex items-center gap-4"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                Checkout the SDK
-                <ArrowRightIcon
-                  weight="bold"
-                  className="w-5 h-5 group-hover:scale-110 origin-center group-hover:-rotate-45 transition-all duration-200"
-                />
-              </motion.a>
-            </div>
-          </motion.div>
-
-          {/* Bottom Section */}
-          <motion.div
-            className="flex flex-col lg:flex-row items-center gap-8 md:gap-16 justify-between pt-16 border-t border-rock/10"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            {/* Navigation Links */}
-            <nav className="flex flex-wrap justify-center lg:justify-start gap-6 md:gap-8 order-2 lg:order-1">
-              <StyledLink href="/about">About</StyledLink>
-              <StyledLink href="/research">Research</StyledLink>
-              <StyledLink href="/publications">Publications</StyledLink>
-              <StyledLink href="/careers">Careers</StyledLink>
-              <StyledLink href="/contact">Contact</StyledLink>
-            </nav>
-
-            {/* Logo and Tagline */}
-            <div className="flex flex-col lg:flex-row items-center gap-6 order-1 lg:order-2">
-              <div className="text-center lg:text-right space-y-1">
-                <p className="text-rock/70 text-sm">
-                  Pushing quantum boundaries.
-                </p>
-                <p className="text-rock/70 text-sm">
-                  Building tomorrow's computing.
-                </p>
-              </div>
-              <Logo className="w-12 h-12" />
-            </div>
-          </motion.div>
-
-          {/* Copyright */}
-          <motion.div
-            className="mt-12 text-center text-rock/50 text-sm"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            <p>
-              &copy; {new Date().getFullYear()} Fermilabs. All rights reserved.
-            </p>
-          </motion.div>
+    <footer className="w-full relative border-t border-rock/30">
+      <div className="container-2xl h-16 border-x border-x-rock/20 flex items-start justify-between px-4">
+        <div className="h-full">
+          <div className="inline-flex text-rock/80 text-xl font-medium items-center h-full border-x border-rock/20 divide-x divide-rock/20">
+            <a
+              href={LINKS.DOCS}
+              className="px-8 h-full flex items-center hover:text-amber-100 hover:bg-white/5 justify-center duration-150 ease-out"
+            >
+              Docs
+            </a>
+            <a
+              href={LINKS.WHITEPAPER}
+              className="px-8 h-full flex items-center hover:text-amber-100 hover:bg-white/5 justify-center duration-150 ease-out"
+            >
+              Whitepaper
+            </a>
+            <a
+              href={LINKS.APP}
+              className="px-8 h-full flex items-center hover:text-amber-100 hover:bg-white/5 justify-center duration-150 ease-out"
+            >
+              Trade
+            </a>
+          </div>
+          {/* <Copyright /> */}
         </div>
+
+        <div className="flex text-rock/80 text-xl items-center h-full border-x border-rock/20 divide-x divide-rock/20">
+          <a
+            href={LINKS.TWITTER}
+            title="X / Twitter"
+            className="px-6 gap-2 group hover:scale-100 h-full flex items-center hover:text-amber-100 hover:bg-white/5 justify-center duration-150 ease-out"
+          >
+            <XLogoIcon className="size-8" />
+          </a>
+          <a
+            href={LINKS.DISCORD}
+            title="Discord"
+            className="px-6 h-full flex hover:scale-100 items-center hover:text-amber-100 hover:bg-white/5 justify-center duration-150 ease-out"
+          >
+            <DiscordLogoIcon className="size-8" />
+          </a>
+          <a
+            href={LINKS.GITHUB}
+            title="Discord"
+            className="px-6 h-full flex hover:scale-100 items-center hover:text-amber-100 hover:bg-white/5 justify-center duration-150 ease-out"
+          >
+            <GithubLogoIcon className="size-8" />
+          </a>
+        </div>
+      </div>
+      <div className="flex items-center justify-between border-t py-4 border-t-rock/20 container-2xl border-x border-x-rock/20 px-4">
+        <div className="flex items-center  border-rock/20 pr-4 group hover:text-amber-200 gap-1">
+          <Logo className="w-10 h-10 group-hover:rotate-360 duration-500" />
+          <a className="text-3xl font-display tracking-wide" href="/">
+            FermiLabs
+          </a>
+        </div>
+        <Copyright />
       </div>
     </footer>
   );

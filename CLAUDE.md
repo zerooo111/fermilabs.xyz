@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Fermilabs.xyz is a website for a research lab focused on building the future of quantum computing. Built with React 19, TypeScript, Vite, and TanStack Router.
+Fermilabs.xyz is a website for a research lab focused on building the future of quantum computing. Built with React 19, TypeScript, and Vite.
 
 ## Essential Commands
 
@@ -27,11 +27,6 @@ bun run test       # Run tests with Vitest
 
 ## Architecture & Key Patterns
 
-### Routing
-- Uses TanStack Router with file-based routing
-- Routes are in `src/routes/` directory
-- `__root.tsx` contains the root layout
-- Route tree is auto-generated in `src/routeTree.gen.ts` (do not edit)
 
 ### Styling
 - Tailwind CSS v4 with Vite plugin
