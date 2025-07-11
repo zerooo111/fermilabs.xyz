@@ -11,8 +11,8 @@ export default function HeroSection() {
       className="relative w-full px-4 border-b border-b-rock/20 overflow-hidden"
     >
       <div className="flex flex-col items-center  relative pt-12 md:pt-24">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl leading-tight md:leading-relaxed font-display text-center md:text-left">
-          Instant Finality. Capital Efficient
+        <h1 className="text-5xl lg:text-7xl leading-tight md:leading-relaxed font-display text-center md:text-left">
+          Instant Finality. <br className="block md:hidden" /> Capital Efficient
         </h1>
 
         <h6 className="text-lg sm:text-xl md:text-2xl lg:text-3xl italic text-center md:text-left mt-4">
