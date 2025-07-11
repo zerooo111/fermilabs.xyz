@@ -44,6 +44,6 @@ a {
 
 @layer utilities {
 	.container-2xl {
-		@apply container mx-auto max-w-screen-2xl ;
+		@apply container mx-auto max-w-screen-2xl;
 	}
 }
