@@ -56,7 +56,7 @@ export default function HeroSection() {
 
       {/* Gradients */}
 
-      <div className="absolute bottom-0 right-0 translate-x-1/2 translate-y-1/3 mix-blend-multiply h-200 blur-3xl opacity-40 w-120  bg-black/20 blur-5xl -skew-x-24" />
+      <div className="absolute bottom-0 right-0 translate-x-1/2 translate-y-1/3 mix-blend-multiply h-200 blur-3xl opacity-40 w-120  bg-black/20 blur-5xl -skew-x-24 pointer-events-none" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 mix-blend-soft-light opacity-40 blur-3xl h-80 w-2/3 bg-radial from-amber-100 to-rock/25 to-70% blur-5xl " />
     </section>
   );

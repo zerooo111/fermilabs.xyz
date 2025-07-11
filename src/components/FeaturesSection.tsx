@@ -10,9 +10,9 @@ export default function FeaturesSection() {
   return (
     <section
       id="features"
-      className="flex flex-col divide-y divide-rock/20 mt-20 md:mt-40 border-y border-rock/20"
+      className="flex flex-col lg:divide-y divide-rock/20 mt-20 md:mt-40 border-y border-rock/20"
     >
-      <div className="flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-rock/20">
+      <div className="flex flex-wrap lg:divide-x divide-rock/20">
         <GlassCard className="w-full lg:w-1/2">
           <GlassCardTitle>Crypto's fairest orderbook</GlassCardTitle>
           <GlassCardContent>
@@ -29,19 +29,23 @@ export default function FeaturesSection() {
             </p>
           </GlassCardContent>
         </GlassCard>
-        <div className="w-full lg:w-1/2 flex items-center justify-center py-12 lg:py-0">
-          <UnicornScene
-            projectId="rU2x4bWOA1sTDCVnhmet?production=true"
-            className="h-40 w-40"
-          />
+        <div className="w-full border-y border-rock/20 lg:border-y-0 lg:w-1/2 flex items-center justify-center py-12 lg:py-0">
+          <div className="size-80 md:size-120 lg:size-full">
+            <UnicornScene
+              projectId="rU2x4bWOA1sTDCVnhmet?production=true"
+              className="size-full"
+            />
+          </div>
         </div>
       </div>
-      <div className="flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-rock/20">
-        <div className="w-full lg:w-1/2 flex items-center justify-center py-12 lg:py-0 order-2 lg:order-1">
-          <UnicornScene
-            projectId="hYf4ksJ9xrUOFcE3EDql"
-            className="h-40 w-40"
-          />
+      <div className="flex flex-wrap lg:divide-x divide-rock/20">
+        <div className="w-full border-y border-rock/20 lg:border-y-0 lg:w-1/2 flex items-center justify-center py-12 lg:py-0 order-2 lg:order-1">
+          <div className="size-80 md:size-120 lg:size-full">
+            <UnicornScene
+              projectId="hYf4ksJ9xrUOFcE3EDql"
+              className="size-full"
+            />
+          </div>
         </div>
         <GlassCard className="w-full lg:w-1/2 shrink-0 order-1 lg:order-2">
           <GlassCardTitle>Modular sequencing</GlassCardTitle>
@@ -94,11 +98,13 @@ export default function FeaturesSection() {
             </div>
           </GlassCardContent>
         </GlassCard>
-        <div className="w-full lg:w-1/2 flex items-center justify-center py-12 lg:py-0">
-          <UnicornScene
-            projectId="63ON74BtloYSYdehHwTw?production=true"
-            className="h-40 w-40"
-          />
+        <div className="w-full lg:w-1/2 border-y border-rock/20 lg:border-y-0 flex items-center justify-center py-12 lg:py-0">
+          <div className="size-80 md:size-120 lg:size-full">
+            <UnicornScene
+              projectId="63ON74BtloYSYdehHwTw?production=true"
+              className="size-full"
+            />
+          </div>
         </div>
       </div>
     </section>

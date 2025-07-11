@@ -13,7 +13,7 @@ function App() {
   }, []);
 
   return (
-    <div className="w-screen flex flex-col items-center">
+    <div className="w-screen flex flex-col items-center ">
       <Header />
       <main className="md:border-x border-rock/20 flex-col gap-20 md:gap-40 container-2xl justify-center items-center">
         <HeroSection />

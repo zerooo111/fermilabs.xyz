@@ -9,8 +9,8 @@ import Logo from "./Logo";
 
 export function Footer() {
   return (
-    <footer className="w-full relative border-t border-rock/30">
-      <div className="container-2xl md:h-16 md:border-x border-x-rock/20 flex flex-col md:flex-row items-center md:items-start justify-between px-4">
+    <footer className="w-full relative border-t border-rock/30 ">
+      <div className="container-2xl md:h-16 md:border-x border-x-rock/20 flex flex-col md:flex-row items-center md:items-start justify-between lg:px-4">
         <div className="w-full md:w-auto md:h-full">
           <div className="flex flex-col sm:flex-row md:inline-flex text-rock/80 text-lg md:text-xl font-medium items-stretch md:items-center md:h-full md:border-x border-rock/20 divide-y sm:divide-y-0 sm:divide-x divide-rock/20">
             <a
