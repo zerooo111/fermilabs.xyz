@@ -56,7 +56,7 @@ export default function FeaturesSection() {
               confirmation and clean execution.
             </p>
             <p>
-              It is easy for an layer-one DeFi app to integrate Continuum with
+              It is easy for any rollup or DeFi app to integrate Continuum with
               minimal changes, using it to sequence user actions fairly and
               execute custom logic, while Continuum handles batch execution and
               onchain settlement.
