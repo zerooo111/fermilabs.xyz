@@ -1,8 +1,7 @@
 export const LINKS = {
 	DOCS: "/",
-	APP: "/",
-	WHITEPAPER: "/",
-	TWITTER: "/",
-	DISCORD: "/",
-	GITHUB: "/",
+	APP: "https://devnet1.fermilabs.xyz",
+	WHITEPAPER: "/whitepaper.pdf",
+	TWITTER: "https://x.com/FermiLabs",
+	DISCORD: "https://discord.gg/kNcktKSk7u",
 };

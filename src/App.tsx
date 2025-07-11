@@ -5,6 +5,7 @@ import HeroSection from "@/components/HeroSection";
 import NoiseOverlay from "@/components/NoiseOverlay";
 import { ArrowRightIcon } from "@phosphor-icons/react";
 import { useEffect } from "react";
+import { LINKS } from "./constants";
 
 function App() {
   useEffect(() => {
@@ -27,8 +28,10 @@ function App() {
           </p>
 
           <div className="mt-8 md:mt-16 flex flex-col sm:flex-row flex-wrap	 gap-4 sm:gap-6 w-full sm:w-auto">
-            <button
-              type="button"
+            <a
+              href={LINKS.APP}
+              target="_blank"
+              rel="noreferrer"
               className="hover:brightness-125 bg-rock text-dark-forest group px-6 sm:px-8 py-3 sm:py-4 text-lg sm:text-xl md:text-2xl font-medium flex items-center justify-center gap-3 sm:gap-4 relative overflow-hidden duration-150 ease-out"
             >
               Launch App
@@ -38,10 +41,12 @@ function App() {
                 className="group-hover:scale-110 origin-center
                 group-hover:-rotate-45 transition-all duration-200 relative sm:w-6 sm:h-6"
               />
-            </button>
+            </a>
 
-            <button
-              type="button"
+            <a
+              href={LINKS.DISCORD}
+              target="_blank"
+              rel="noreferrer"
               className="hover:brightness-120 bg-amber-200 group text-dark-forest px-6 sm:px-8 py-3 sm:py-4 text-lg sm:text-xl md:text-2xl font-medium flex items-center justify-center gap-3 sm:gap-4 relative overflow-hidden duration-150 ease-out"
             >
               Join Discord
@@ -51,9 +56,9 @@ function App() {
                 className="group-hover:scale-110 origin-center
                 group-hover:-rotate-45 transition-all duration-200 relative sm:w-6 sm:h-6"
               />
-            </button>
+            </a>
 
-            <button
+            {/* <button
               type="button"
               className="hover:brightness-120 border-2 border-rock/30 hover:border-rock/50 group text-rock/80 hover:text-rock px-6 sm:px-8 py-3 sm:py-4 text-lg sm:text-xl md:text-2xl font-medium flex items-center justify-center gap-3 sm:gap-4 relative overflow-hidden duration-150 ease-out"
             >
@@ -64,7 +69,7 @@ function App() {
                 className="group-hover:scale-110 origin-center
                 group-hover:-rotate-45 transition-all duration-200 relative sm:w-6 sm:h-6"
               />
-            </button>
+            </button> */}
           </div>
         </div>
       </main>

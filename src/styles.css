@@ -32,7 +32,7 @@ a {
 @layer base {
 	html,
 	body {
-		@apply bg-dark-forest text-rock;
+		@apply bg-dark-forest text-rock scroll-smooth;
 	}
 }
 

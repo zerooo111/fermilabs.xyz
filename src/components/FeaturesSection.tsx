@@ -8,7 +8,10 @@ import UnicornScene from "./UnicornScene";
 
 export default function FeaturesSection() {
   return (
-    <section className="flex flex-col divide-y divide-rock/20 mt-20 md:mt-40 border-y border-rock/20">
+    <section
+      id="features"
+      className="flex flex-col divide-y divide-rock/20 mt-20 md:mt-40 border-y border-rock/20"
+    >
       <div className="flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-rock/20">
         <GlassCard className="w-full lg:w-1/2">
           <GlassCardTitle>Crypto's fairest orderbook</GlassCardTitle>
@@ -78,7 +81,7 @@ export default function FeaturesSection() {
                   size={28}
                   className="sm:w-8 sm:h-8"
                 />
-                Lendings platform
+                Lending protocol
               </div>
               <div className="glass-card p-3 sm:p-4 shadow-xl border border-rock/30   bg-dark-forest/50 flex items-center gap-3 sm:gap-4">
                 <VaultIcon size={28} className="sm:w-8 sm:h-8" />
