@@ -4,7 +4,6 @@ import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import NoiseOverlay from "@/components/NoiseOverlay";
 import { ArrowRightIcon } from "@phosphor-icons/react";
-import { useEffect } from "react";
 import { LINKS } from "./constants";
 
 function App() {
