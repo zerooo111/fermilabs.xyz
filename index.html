@@ -9,20 +9,75 @@
       name="description"
       content="Instant Finality. Fair Ordering. Shared Liquidity. Meet crypto's most performant CLOB"
     />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://fermilabs.xyz">
+    <meta property="og:title" content="FermiLabs - Crypto's Most Performant CLOB">
+    <meta property="og:description" content="Instant Finality. Fair Ordering. Shared Liquidity. Meet crypto's most performant CLOB">
+    <meta property="og:image" content="https://fermilabs.xyz/logo.svg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://fermilabs.xyz">
+    <meta property="twitter:title" content="FermiLabs - Crypto's Most Performant CLOB">
+    <meta property="twitter:description" content="Instant Finality. Fair Ordering. Shared Liquidity. Meet crypto's most performant CLOB">
+    <meta property="twitter:image" content="https://fermilabs.xyz/logo.svg">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://fermilabs.xyz">
+    
     <link rel="apple-touch-icon" href="/logo192.png" />
     <link rel="manifest" href="/manifest.json" />
-    <title>FermiLabs</title>
+    <title>FermiLabs - Crypto's Most Performant CLOB</title>
 
+    <!-- Preconnect to Google Fonts domains for faster connection -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- DNS prefetch as fallback for older browsers -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    
+    <!-- Preload critical font files for faster initial render -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital@0;1&display=swap"
+    />
+    
+    <!-- Load Google Fonts with font-display: swap already included in URL -->
     <link
       href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital@0;1&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
+    
+    <!-- Fallback for browsers without JavaScript -->
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital@0;1&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
   </head>
   <body>
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "FermiLabs",
+      "url": "https://fermilabs.xyz",
+      "logo": "https://fermilabs.xyz/logo.svg",
+      "description": "Instant Finality. Fair Ordering. Shared Liquidity. Meet crypto's most performant CLOB",
+      "sameAs": []
+    }
+    </script>
+    
     <div id="app"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.27/dist/unicornStudio.umd.js"></script>
+    <script async src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.27/dist/unicornStudio.umd.js"></script>
   </body>
 </html>

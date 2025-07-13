@@ -1,4 +1,4 @@
-import FeaturesSection from "@/components/FeaturesSection";
+import { lazy, Suspense } from "react";
 import { Footer } from "@/components/Footer";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
@@ -6,13 +6,17 @@ import NoiseOverlay from "@/components/NoiseOverlay";
 import { ArrowRightIcon } from "@phosphor-icons/react";
 import { LINKS } from "./constants";
 
+const FeaturesSection = lazy(() => import("@/components/FeaturesSection"));
+
 function App() {
   return (
     <div className="w-screen flex flex-col items-center ">
       <Header />
       <main className="md:border-x border-rock/20 flex-col gap-20 md:gap-40 container-2xl justify-center items-center">
         <HeroSection />
-        <FeaturesSection />
+        <Suspense fallback={<div className="h-96 flex items-center justify-center text-rock/60">Loading features...</div>}>
+          <FeaturesSection />
+        </Suspense>
         <div className="flex flex-col items-center justify-between py-12 md:py-20 px-4">
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-7xl mb-4 md:mb-6 leading-tight text-rock text-center">
             Ready to experience the fastest DEX?

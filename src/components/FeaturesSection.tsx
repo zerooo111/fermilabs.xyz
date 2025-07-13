@@ -34,6 +34,7 @@ export default function FeaturesSection() {
 						<UnicornScene
 							projectId="rU2x4bWOA1sTDCVnhmet?production=true"
 							className="size-full"
+							lazyLoad={true}
 						/>
 					</div>
 				</div>
@@ -44,6 +45,7 @@ export default function FeaturesSection() {
 						<UnicornScene
 							projectId="hYf4ksJ9xrUOFcE3EDql"
 							className="size-full"
+							lazyLoad={true}
 						/>
 					</div>
 				</div>
@@ -103,6 +105,7 @@ export default function FeaturesSection() {
 						<UnicornScene
 							projectId="63ON74BtloYSYdehHwTw?production=true"
 							className="size-full"
+							lazyLoad={true}
 						/>
 					</div>
 				</div>

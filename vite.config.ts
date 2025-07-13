@@ -12,4 +12,16 @@ export default defineConfig({
       "@": resolve(fileURLToPath(new URL(".", import.meta.url)), "src"),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          phosphor: ['@phosphor-icons/react'],
+          posthog: ['posthog-js']
+        }
+      }
+    },
+    minify: true
+  }
 });
