@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "vite --port 3000",
     "start": "vite --port 3000",
-    "build": "vite build && tsc",
-    "serve": "vite build && tsc &&vite preview",
+    "build": "tsc && vite build",
+    "serve": "tsc && vite build && vite preview",
     "test": "vitest run",
     "format": "biome format",
     "lint": "biome lint",

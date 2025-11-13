@@ -263,7 +263,7 @@ const Shuffle: React.FC<ShuffleProps> = ({
           onRepeat: () => {
             if (scrambleCharset) randomizeScrambles();
             gsap.set(strips, {
-              x: (i, t: HTMLElement) =>
+              x: (_i, t: HTMLElement) =>
                 parseFloat(t.getAttribute("data-start-x") || "0"),
             });
             onShuffleComplete?.();
@@ -283,7 +283,7 @@ const Shuffle: React.FC<ShuffleProps> = ({
           tl.to(
             targets,
             {
-              x: (i, t: HTMLElement) =>
+              x: (_i, t: HTMLElement) =>
                 parseFloat(t.getAttribute("data-final-x") || "0"),
               duration,
               ease,
@@ -407,10 +407,10 @@ const Shuffle: React.FC<ShuffleProps> = ({
   const classes = `${baseTw} ${
     ready ? "visible" : "invisible"
   } ${className}`.trim();
-  const Tag = (tag || "p") as keyof JSX.IntrinsicElements;
+  const Tag = tag || "p";
 
   return React.createElement(
-    Tag,
+    Tag as React.ElementType,
     { ref: ref as any, className: classes, style: commonStyle },
     text
   );
