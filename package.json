@@ -10,8 +10,7 @@
     "test": "vitest run",
     "format": "biome format",
     "lint": "biome lint",
-    "check": "biome check",
-    "postinstall": "npm rebuild rollup"
+    "check": "biome check"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
