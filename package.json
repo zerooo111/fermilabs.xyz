@@ -13,12 +13,18 @@
     "check": "biome check"
   },
   "dependencies": {
+    "@gsap/react": "^2.1.2",
     "@phosphor-icons/react": "^2.1.10",
+    "@react-three/fiber": "^9.4.0",
+    "@react-three/postprocessing": "^3.0.4",
     "@tailwindcss/vite": "^4.0.6",
+    "gsap": "^3.13.0",
     "posthog-js": "^1.257.0",
+    "postprocessing": "^6.38.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tailwindcss": "^4.0.6"
+    "tailwindcss": "^4.0.6",
+    "three": "^0.181.1"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
