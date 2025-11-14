@@ -35,6 +35,7 @@ export function createShuffle(text, options = {}) {
 	let tlRef = null;
 	let playing = false;
 	let hoverHandler = null;
+	let hoverTarget = null;
 
 	const el = document.createElement(tag);
 	el.textContent = text;
@@ -47,9 +48,11 @@ export function createShuffle(text, options = {}) {
 	});
 
 	const removeHover = () => {
-		if (hoverHandler && el) {
-			el.removeEventListener("mouseenter", hoverHandler);
+		if (hoverHandler && hoverTarget) {
+			hoverTarget.removeEventListener("mouseenter", hoverHandler);
+			hoverTarget.removeEventListener("mousemove", hoverHandler);
 			hoverHandler = null;
+			hoverTarget = null;
 		}
 	};
 
@@ -271,33 +274,62 @@ export function createShuffle(text, options = {}) {
 		tlRef = tl;
 	};
 
-	const armHover = () => {
-		if (!triggerOnHover || !el) return;
+	const armHover = (parentElement) => {
+		if (!triggerOnHover) return;
 
 		removeHover();
 
-		const handler = () => {
-			if (playing) return;
-			build();
-			if (scrambleCharset) randomizeScrambles();
-			play();
+		// Get the hero text container to check bounds
+		const heroTextContainer = document.getElementById("hero-text-container");
+
+		let isInsideTextArea = false;
+
+		const checkBounds = (e) => {
+			if (!heroTextContainer) return false;
+			const rect = heroTextContainer.getBoundingClientRect();
+			return (
+				e.clientX >= rect.left &&
+				e.clientX <= rect.right &&
+				e.clientY >= rect.top &&
+				e.clientY <= rect.bottom
+			);
 		};
 
-		hoverHandler = handler;
-		el.addEventListener("mouseenter", handler);
+		const mouseMoveHandler = (e) => {
+			const wasInside = isInsideTextArea;
+			isInsideTextArea = checkBounds(e);
+
+			// Trigger on mouse enter to text area
+			if (!wasInside && isInsideTextArea) {
+				console.log("Shuffle: Mouse entered text area");
+				if (playing) return;
+				build();
+				if (scrambleCharset) randomizeScrambles();
+				play();
+			}
+		};
+
+		hoverHandler = mouseMoveHandler;
+
+		// Listen on parent if provided, otherwise on el
+		const target = parentElement || el;
+		if (target) {
+			hoverTarget = target;
+			target.addEventListener("mousemove", mouseMoveHandler);
+		}
 	};
 
-	const create = () => {
+	const create = (parentElement) => {
 		build();
 		if (scrambleCharset) randomizeScrambles();
 		play();
-		armHover();
+		armHover(parentElement);
 		el.classList.remove("invisible");
 		el.classList.add("visible");
 	};
 
 	// Wait for fonts to load
-	const init = () => {
+	const init = (parentElement) => {
 		if (
 			respectReducedMotion &&
 			window.matchMedia &&
@@ -321,7 +353,7 @@ export function createShuffle(text, options = {}) {
 			trigger: el,
 			start,
 			once: triggerOnce,
-			onEnter: create,
+			onEnter: () => create(parentElement),
 		});
 
 		// Store cleanup function
@@ -332,16 +364,8 @@ export function createShuffle(text, options = {}) {
 		};
 	};
 
-	// Initialize after fonts are loaded
-	if ("fonts" in document) {
-		if (document.fonts.status === "loaded") {
-			setTimeout(init, 0);
-		} else {
-			document.fonts.ready.then(() => setTimeout(init, 0));
-		}
-	} else {
-		setTimeout(init, 0);
-	}
+	// Store init function for later use
+	el._init = init;
 
 	return el;
 }
@@ -374,4 +398,26 @@ export function initShuffle(elementId, text) {
 
 	element.textContent = "";
 	element.appendChild(shuffleEl);
+
+	// Get the hero section directly
+	const heroSection = document.getElementById("hero-section");
+	console.log("Shuffle init:", elementId, "Hero section:", heroSection);
+
+	// Initialize after fonts are loaded
+	const initWithParent = () => {
+		if (shuffleEl._init) {
+			console.log("Shuffle: Initializing with hero section");
+			shuffleEl._init(heroSection);
+		}
+	};
+
+	if ("fonts" in document) {
+		if (document.fonts.status === "loaded") {
+			setTimeout(initWithParent, 0);
+		} else {
+			document.fonts.ready.then(() => setTimeout(initWithParent, 0));
+		}
+	} else {
+		setTimeout(initWithParent, 0);
+	}
 }

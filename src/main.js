@@ -51,12 +51,7 @@ mobileMenu?.querySelectorAll("a").forEach((link) => {
 // Lazy load animations
 const loadAnimations = async () => {
 	try {
-		const { initShuffle } = await import("./animations/shuffle.js");
 		const { initDither } = await import("./animations/dither.js");
-
-		// Initialize shuffle animations
-		initShuffle("shuffle-fermi", "Fermi");
-		initShuffle("shuffle-labs", "Labs");
 
 		// Initialize dither background
 		initDither("dither-bg");
