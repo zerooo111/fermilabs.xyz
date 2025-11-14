@@ -9,7 +9,6 @@
 	--screen-xl: 1280px;
 	--screen-2xl: 1440px;
 	--color-rock: #f8f7e7;
-	/* --color-dark-forest: #002513; */
 	--color-dark-forest: #185038;
 }
 
@@ -23,10 +22,6 @@ a {
 	cursor: pointer;
 }
 
-#app {
-	min-height: 100vh;
-	width: 100%;
-}
 @layer base {
 	html,
 	body {

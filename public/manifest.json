@@ -1,15 +1,16 @@
 {
   "short_name": "FermiLabs",
-  "name": "FermiLabs",
+  "name": "FermiLabs - Crypto's Most Performant CLOB",
+  "description": "Instant Finality. Fair Ordering. Shared Liquidity. Meet crypto's most performant CLOB",
   "icons": [
     {
       "src": "logo.svg",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "sizes": "any",
+      "type": "image/svg+xml"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#185038",
+  "background_color": "#185038"
 }

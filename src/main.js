@@ -52,9 +52,24 @@ mobileMenu?.querySelectorAll("a").forEach((link) => {
 const loadAnimations = async () => {
 	try {
 		const { initDither } = await import("./animations/dither.js");
+		const { initDecrypt } = await import("./animations/decrypt.js");
 
 		// Initialize dither background
 		initDither("dither-bg");
+
+		// Initialize decrypt animation on hero text
+		// Animation triggers on first render and repeats every 5 seconds
+		initDecrypt(".hero-decrypt", {
+			speed: 100, // Time between character updates in ms
+			sequential: true, // Reveal one character at a time
+			revealDirection: "start", // Reveal from start to end
+			useOriginalCharsOnly: false, // Use random characters
+			characters:
+				"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()_+",
+			encryptedClass: "text-rock/50", // Encrypted character styling
+			revealedClass: "", // Revealed character styling (uses default)
+			repeatInterval: 5000, // Repeat every 5 seconds
+		});
 	} catch (error) {
 		console.error("Failed to load animations:", error);
 	}
