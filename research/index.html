@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#185038" />
     <meta
       name="description"
-      content="Fermi Labs engineers high performance distributed systems. Research on market microstructure, verifiable sequencing, market making and low-level Rust optimizations."
+      content="Fermi Labs research on market microstructure, verifiable sequencing, market making and low-level Rust optimizations."
     />
     <meta
       name="keywords"
@@ -18,14 +18,14 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://fermilabs.xyz" />
+    <meta property="og:url" content="https://fermilabs.xyz/research/" />
     <meta
       property="og:title"
-      content="Fermi Labs - Engineering High Performance Distributed Systems"
+      content="Research - Fermi Labs"
     />
     <meta
       property="og:description"
-      content="Fermi Labs engineers high performance distributed systems. Research on market microstructure, verifiable sequencing, market making and low-level Rust optimizations."
+      content="Fermi Labs research on market microstructure, verifiable sequencing, market making and low-level Rust optimizations."
     />
     <meta property="og:image" content="https://fermilabs.xyz/logo.svg" />
     <meta property="og:site_name" content="FermiLabs" />
@@ -33,23 +33,23 @@
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://fermilabs.xyz" />
+    <meta property="twitter:url" content="https://fermilabs.xyz/research/" />
     <meta
       property="twitter:title"
-      content="Fermi Labs - Engineering High Performance Distributed Systems"
+      content="Research - Fermi Labs"
     />
     <meta
       property="twitter:description"
-      content="Fermi Labs engineers high performance distributed systems. Research on market microstructure, verifiable sequencing, market making and low-level Rust optimizations."
+      content="Fermi Labs research on market microstructure, verifiable sequencing, market making and low-level Rust optimizations."
     />
     <meta property="twitter:image" content="https://fermilabs.xyz/logo.svg" />
 
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://fermilabs.xyz" />
+    <link rel="canonical" href="https://fermilabs.xyz/research/" />
 
     <link rel="apple-touch-icon" href="/logo.svg" />
     <link rel="manifest" href="/manifest.json" />
-    <title>Fermi Labs - Engineering High Performance Distributed Systems</title>
+    <title>Research - Fermi Labs</title>
 
     <!-- Preconnect to Google Fonts domains for faster connection -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -83,26 +83,6 @@
     </noscript>
   </head>
   <body>
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "FermiLabs",
-        "alternateName": "Fermi Labs",
-        "url": "https://fermilabs.xyz",
-        "logo": "https://fermilabs.xyz/logo.svg",
-        "description": "Engineering high performance distributed systems.",
-        "foundingDate": "2024",
-        "sameAs": ["https://x.com/FermiLabs", "https://discord.gg/kNcktKSk7u"],
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "contactType": "Customer Service",
-          "availableLanguage": "English"
-        }
-      }
-    </script>
-
     <div class="w-screen flex flex-col items-center">
       <!-- Header -->
       <header
@@ -206,212 +186,167 @@
         </div>
       </header>
 
-      <!-- Main Content -->
       <main class="flex flex-col w-full">
-        <!-- Hero Section -->
         <section
           id="hero-section"
           class="relative z-[0] w-full border-b border-b-rock/20 overflow-hidden"
         >
           <div
             id="dither-bg"
-            class="absolute inset-0 w-full h-full opacity-50 brightness-80 z-0 pointer-events-auto"
+            class="absolute inset-0 w-full h-full opacity-40 brightness-75 z-0 pointer-events-auto"
           ></div>
-
-          <div
-            class="container-2xl px-4 sm:px-6 md:px-8 relative z-10 pointer-events-none"
-          >
-            <div
-              id="hero-text-container"
-              class="flex flex-col justify-center relative pt-16 sm:pt-20 md:pt-32 lg:pt-26 pb-16 sm:pb-20 md:pb-28 lg:pb-32"
-            >
-              <div
-                class="text-6xl md:text-[120px] select-none font-display font-bold flex flex-col lg:flex-row lg:gap-6"
+          <div class="container-2xl px-4 sm:px-6 md:px-8 relative z-10 pointer-events-none py-16 md:py-24 flex flex-col gap-6">
+            <p class="font-mono text-sm uppercase tracking-[0.2em] text-amber-200/80">Fermi Labs</p>
+            <h1 class="hero-decrypt text-6xl md:text-[120px] leading-none select-none font-display font-bold">Research</h1>
+            <p class="text-lg sm:text-2xl md:text-3xl text-amber-200 font-medium max-w-3xl">
+              Notes from engineering high performance distributed systems.
+            </p>
+            <nav aria-label="Topics" class="flex flex-wrap gap-2 font-mono text-sm text-rock/80 pointer-events-auto">
+              <a
+                href="#market-microstructure"
+                class="px-3 py-1.5 border border-rock/20 bg-dark-forest/60 backdrop-blur-md hover:border-amber-200/60 hover:text-amber-100 duration-150 ease-out"
+                >01/ Market Microstructure <span class="text-rock/40">(3)</span></a
               >
-                <h1 class="hero-decrypt">Fermi Labs</h1>
-              </div>
-
-              <p
-                class="text-lg sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-amber-200 font-medium max-w-4xl leading"
+              <a
+                href="#verifiable-sequencing"
+                class="px-3 py-1.5 border border-rock/20 bg-dark-forest/60 backdrop-blur-md hover:border-amber-200/60 hover:text-amber-100 duration-150 ease-out"
+                >02/ Verifiable Sequencing <span class="text-rock/40">(2)</span></a
               >
-                Engineering High Performance Distributed Systems
-              </p>
-            </div>
+              <a
+                href="#market-making"
+                class="px-3 py-1.5 border border-rock/20 bg-dark-forest/60 backdrop-blur-md hover:border-amber-200/60 hover:text-amber-100 duration-150 ease-out"
+                >03/ Market Making <span class="text-rock/40">(0)</span></a
+              >
+              <a
+                href="#rust-optimizations"
+                class="px-3 py-1.5 border border-rock/20 bg-dark-forest/60 backdrop-blur-md hover:border-amber-200/60 hover:text-amber-100 duration-150 ease-out"
+                >04/ Low-Level Rust Optimizations <span class="text-rock/40">(0)</span></a
+              >
+            </nav>
           </div>
-
-          <!-- Enhanced Gradients -->
-          <div
-            class="absolute bottom-0 right-0 translate-x-1/2 translate-y-1/3 mix-blend-multiply h-200 blur-3xl opacity-50 w-120 bg-black/30 blur-5xl -skew-x-24 pointer-events-none z-[1]"
-          ></div>
-          <div
-            class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 mix-blend-soft-light opacity-50 blur-3xl h-96 w-3/4 bg-radial from-amber-100 to-rock/25 to-70% blur-5xl pointer-events-none z-[1]"
-          ></div>
-          <div
-            class="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-1/4 mix-blend-soft-light opacity-30 blur-3xl h-64 w-64 bg-amber-200/40 rounded-full blur-5xl pointer-events-none z-[1]"
-          ></div>
         </section>
 
-        <!-- Research Section -->
-        <section class="w-full border-b border-b-rock/20">
-          <div class="container-2xl p-4 md:p-8 flex flex-col gap-6 md:gap-10">
-            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-              <div class="flex flex-col gap-2">
-                <p class="font-mono text-sm uppercase tracking-[0.2em] text-amber-200/80">
-                  Topics
-                </p>
-                <h2 class="text-5xl md:text-6xl leading-[120%] font-semibold -tracking-wide">
-                  Read our research
-                </h2>
-              </div>
-              <a
-                href="/research/"
-                class="group flex items-center gap-2 font-mono text-sm uppercase tracking-[0.15em] text-rock/80 hover:text-amber-100 duration-150 ease-out"
-              >
-                All articles
-                <span class="group-hover:translate-x-1 duration-200">&rarr;</span>
-              </a>
+        <section id="market-microstructure" class="w-full border-b border-b-rock/20 scroll-mt-14">
+          <div class="container-2xl p-4 md:p-8 py-12 md:py-16 flex flex-col gap-6 md:gap-8">
+            <div class="flex flex-col gap-2 max-w-3xl">
+              <p class="font-mono text-sm uppercase tracking-[0.2em] text-amber-200/80">01/</p>
+              <h2 class="text-4xl md:text-5xl font-semibold -tracking-wide">Market Microstructure</h2>
+              <p class="text-lg sm:text-xl text-rock/60">How orders match, queue and clear — and how to get exchange-grade market structure onchain.</p>
             </div>
-
-            <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <ul class="divide-y divide-rock/15 border-t border-rock/15">
               <li>
                 <a
-                  href="/research/#market-microstructure"
-                  class="topic-card dither-fade group relative h-full p-6 sm:p-8 flex flex-col justify-between gap-10 border border-rock/20 hover:border-amber-200/50 duration-200 ease-out"
+                  href="https://seldonfromfermi.substack.com/p/fermi-v1-designing-a-fifo-perps-exchange"
+                  target="_blank"
+                  rel="noreferrer"
+                  class="group grid grid-cols-1 md:grid-cols-[10rem_1fr_auto] gap-2 md:gap-8 py-6 md:py-8 hover:bg-white/5 px-2 md:px-4 -mx-2 md:-mx-4 duration-150 ease-out"
                 >
-                  <div class="flex items-center justify-between font-mono text-sm text-rock/50">
-                    <span>01/</span>
-                    <span class="group-hover:text-amber-200 group-hover:translate-x-1 duration-200">&rarr;</span>
-                  </div>
+                  <time class="font-mono text-sm text-rock/50 md:pt-2">Apr 14, 2026</time>
                   <div class="flex flex-col gap-2">
-                    <h3 class="text-2xl sm:text-3xl font-display tracking-[0.02em] group-hover:text-amber-100">
-                      Market Microstructure
-                    </h3>
-                    <p class="text-rock/60">How orders match, queue and clear</p>
+                    <h3 class="text-2xl sm:text-3xl font-display tracking-[0.02em] group-hover:text-amber-100">Fermi v1: Designing a FIFO perps exchange on Solana</h3>
                   </div>
+                  <span class="hidden md:block font-mono text-rock/50 pt-2 group-hover:text-amber-200 group-hover:translate-x-1 duration-200">&rarr;</span>
                 </a>
               </li>
               <li>
                 <a
-                  href="/research/#verifiable-sequencing"
-                  class="topic-card dither-fade group relative h-full p-6 sm:p-8 flex flex-col justify-between gap-10 border border-rock/20 hover:border-amber-200/50 duration-200 ease-out"
+                  href="https://seldonfromfermi.substack.com/p/the-market-structure-wars"
+                  target="_blank"
+                  rel="noreferrer"
+                  class="group grid grid-cols-1 md:grid-cols-[10rem_1fr_auto] gap-2 md:gap-8 py-6 md:py-8 hover:bg-white/5 px-2 md:px-4 -mx-2 md:-mx-4 duration-150 ease-out"
                 >
-                  <div class="flex items-center justify-between font-mono text-sm text-rock/50">
-                    <span>02/</span>
-                    <span class="group-hover:text-amber-200 group-hover:translate-x-1 duration-200">&rarr;</span>
-                  </div>
+                  <time class="font-mono text-sm text-rock/50 md:pt-2">Feb 19, 2026</time>
                   <div class="flex flex-col gap-2">
-                    <h3 class="text-2xl sm:text-3xl font-display tracking-[0.02em] group-hover:text-amber-100">
-                      Verifiable Sequencing
-                    </h3>
-                    <p class="text-rock/60">Provable, fair transaction ordering</p>
+                    <h3 class="text-2xl sm:text-3xl font-display tracking-[0.02em] group-hover:text-amber-100">The Market Structure Wars</h3>
+                  <p class="text-rock/60 text-lg">What's the ideal way to match orders and execute trades?</p>
                   </div>
+                  <span class="hidden md:block font-mono text-rock/50 pt-2 group-hover:text-amber-200 group-hover:translate-x-1 duration-200">&rarr;</span>
                 </a>
               </li>
               <li>
                 <a
-                  href="/research/#market-making"
-                  class="topic-card dither-fade group relative h-full p-6 sm:p-8 flex flex-col justify-between gap-10 border border-rock/20 hover:border-amber-200/50 duration-200 ease-out"
+                  href="https://seldonfromfermi.substack.com/p/the-blockchain-capital-markets-roadmap"
+                  target="_blank"
+                  rel="noreferrer"
+                  class="group grid grid-cols-1 md:grid-cols-[10rem_1fr_auto] gap-2 md:gap-8 py-6 md:py-8 hover:bg-white/5 px-2 md:px-4 -mx-2 md:-mx-4 duration-150 ease-out"
                 >
-                  <div class="flex items-center justify-between font-mono text-sm text-rock/50">
-                    <span>03/</span>
-                    <span class="group-hover:text-amber-200 group-hover:translate-x-1 duration-200">&rarr;</span>
-                  </div>
+                  <time class="font-mono text-sm text-rock/50 md:pt-2">Feb 3, 2026</time>
                   <div class="flex flex-col gap-2">
-                    <h3 class="text-2xl sm:text-3xl font-display tracking-[0.02em] group-hover:text-amber-100">
-                      Market Making
-                    </h3>
-                    <p class="text-rock/60">Liquidity provision and quoting</p>
+                    <h3 class="text-2xl sm:text-3xl font-display tracking-[0.02em] group-hover:text-amber-100">The Blockchain Capital Markets Roadmap</h3>
+                  <p class="text-rock/60 text-lg">How blockchains will achieve NASDAQ like market microstructure without trusted intermediaries.</p>
                   </div>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/research/#rust-optimizations"
-                  class="topic-card dither-fade group relative h-full p-6 sm:p-8 flex flex-col justify-between gap-10 border border-rock/20 hover:border-amber-200/50 duration-200 ease-out"
-                >
-                  <div class="flex items-center justify-between font-mono text-sm text-rock/50">
-                    <span>04/</span>
-                    <span class="group-hover:text-amber-200 group-hover:translate-x-1 duration-200">&rarr;</span>
-                  </div>
-                  <div class="flex flex-col gap-2">
-                    <h3 class="text-2xl sm:text-3xl font-display tracking-[0.02em] group-hover:text-amber-100">
-                      Low-Level Rust Optimizations
-                    </h3>
-                    <p class="text-rock/60">Squeezing latency out of the hot path</p>
-                  </div>
+                  <span class="hidden md:block font-mono text-rock/50 pt-2 group-hover:text-amber-200 group-hover:translate-x-1 duration-200">&rarr;</span>
                 </a>
               </li>
             </ul>
           </div>
         </section>
-
-        <!-- Projects Section -->
-        <section class="w-full">
-          <div class="container-2xl p-4 md:p-8 flex flex-col gap-4 md:gap-8">
-            <h2
-              class="text-5xl md:text-6xl leading-[140%] font-semibold -tracking-wide"
-            >
-              We are building...
-            </h2>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <a
-                href="https://fermi.trade"
-                target="_blank"
-                rel="noreferrer"
-                class="group glass-card p-6 sm:p-8 md:p-10 flex flex-col gap-4 hover:brightness-110 transition-all duration-150 ease-out border border-rock/20 hover:border-rock/30"
-              >
-                <div class="flex items-start justify-between gap-4">
-                  <h3
-                    class="text-2xl sm:text-3xl md:text-4xl font-display tracking-[0.02em]"
-                  >
-                    Fermi Trade
-                  </h3>
-                  <svg
-                    class="group-hover:scale-110 origin-center group-hover:-rotate-45 transition-all duration-200 flex-shrink-0 sm:w-6 sm:h-6"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 256 256"
-                    fill="currentColor"
-                  >
-                    <path
-                      d="M220,48V96a12,12,0,0,1-24,0V77l-75.51,75.52a12,12,0,0,1-17-17L179,60H160a12,12,0,0,1,0-24h48A12,12,0,0,1,220,48ZM192,148a12,12,0,0,0-12,12v52H44V76h52a12,12,0,0,0,0-24H40A12,12,0,0,0,28,64V216a12,12,0,0,0,12,12H184a12,12,0,0,0,12-12V160A12,12,0,0,0,192,148Z"
-                    />
-                  </svg>
-                </div>
-                <p class="text-lg sm:text-xl text-rock/80 flex-grow">
-                  Instant finality, capital efficient decentralized exchange
-                </p>
-              </a>
-
-              <a
-                href="https://continuum.wtf"
-                target="_blank"
-                rel="noreferrer"
-                class="group glass-card p-6 sm:p-8 md:p-10 flex flex-col gap-4 hover:brightness-110 transition-all duration-150 ease-out border border-rock/20 hover:border-rock/30"
-              >
-                <div class="flex items-start justify-between gap-4">
-                  <h3
-                    class="text-2xl sm:text-3xl md:text-4xl font-display tracking-[0.02em]"
-                  >
-                    Continuum
-                  </h3>
-                  <svg
-                    class="group-hover:scale-110 origin-center group-hover:-rotate-45 transition-all duration-200 flex-shrink-0 sm:w-6 sm:h-6"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 256 256"
-                    fill="currentColor"
-                  >
-                    <path
-                      d="M220,48V96a12,12,0,0,1-24,0V77l-75.51,75.52a12,12,0,0,1-17-17L179,60H160a12,12,0,0,1,0-24h48A12,12,0,0,1,220,48ZM192,148a12,12,0,0,0-12,12v52H44V76h52a12,12,0,0,0,0-24H40A12,12,0,0,0,28,64V216a12,12,0,0,0,12,12H184a12,12,0,0,0,12-12V160A12,12,0,0,0,192,148Z"
-                    />
-                  </svg>
-                </div>
-                <p class="text-lg sm:text-xl text-rock/80 flex-grow">
-                  Modular sequencing layer for fair transaction ordering
-                </p>
-              </a>
+        <section id="verifiable-sequencing" class="w-full border-b border-b-rock/20 scroll-mt-14">
+          <div class="container-2xl p-4 md:p-8 py-12 md:py-16 flex flex-col gap-6 md:gap-8">
+            <div class="flex flex-col gap-2 max-w-3xl">
+              <p class="font-mono text-sm uppercase tracking-[0.2em] text-amber-200/80">02/</p>
+              <h2 class="text-4xl md:text-5xl font-semibold -tracking-wide">Verifiable Sequencing</h2>
+              <p class="text-lg sm:text-xl text-rock/60">Provable, fair transaction ordering without trusting the sequencer.</p>
+            </div>
+            <ul class="divide-y divide-rock/15 border-t border-rock/15">
+              <li>
+                <a
+                  href="https://seldonfromfermi.substack.com/p/verifiable-ordering-on-blockchains"
+                  target="_blank"
+                  rel="noreferrer"
+                  class="group grid grid-cols-1 md:grid-cols-[10rem_1fr_auto] gap-2 md:gap-8 py-6 md:py-8 hover:bg-white/5 px-2 md:px-4 -mx-2 md:-mx-4 duration-150 ease-out"
+                >
+                  <time class="font-mono text-sm text-rock/50 md:pt-2">Mar 8, 2026</time>
+                  <div class="flex flex-col gap-2">
+                    <h3 class="text-2xl sm:text-3xl font-display tracking-[0.02em] group-hover:text-amber-100">Verifiable ordering on Blockchains - Proof of Sequence (POSq)</h3>
+                  <p class="text-rock/60 text-lg">The core internal timekeeping mechanism behind Continuum Chain's FIFO guarantees</p>
+                  </div>
+                  <span class="hidden md:block font-mono text-rock/50 pt-2 group-hover:text-amber-200 group-hover:translate-x-1 duration-200">&rarr;</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://seldonfromfermi.substack.com/p/continuum-the-blockchain-for-trading"
+                  target="_blank"
+                  rel="noreferrer"
+                  class="group grid grid-cols-1 md:grid-cols-[10rem_1fr_auto] gap-2 md:gap-8 py-6 md:py-8 hover:bg-white/5 px-2 md:px-4 -mx-2 md:-mx-4 duration-150 ease-out"
+                >
+                  <time class="font-mono text-sm text-rock/50 md:pt-2">Mar 8, 2026</time>
+                  <div class="flex flex-col gap-2">
+                    <h3 class="text-2xl sm:text-3xl font-display tracking-[0.02em] group-hover:text-amber-100">Continuum - The Blockchain for Trading</h3>
+                  <p class="text-rock/60 text-lg">TradFi meets DeFi</p>
+                  </div>
+                  <span class="hidden md:block font-mono text-rock/50 pt-2 group-hover:text-amber-200 group-hover:translate-x-1 duration-200">&rarr;</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </section>
+        <section id="market-making" class="w-full border-b border-b-rock/20 scroll-mt-14">
+          <div class="container-2xl p-4 md:p-8 py-12 md:py-16 flex flex-col gap-6 md:gap-8">
+            <div class="flex flex-col gap-2 max-w-3xl">
+              <p class="font-mono text-sm uppercase tracking-[0.2em] text-amber-200/80">03/</p>
+              <h2 class="text-4xl md:text-5xl font-semibold -tracking-wide">Market Making</h2>
+              <p class="text-lg sm:text-xl text-rock/60">Liquidity provision, quoting and inventory risk on low-latency venues.</p>
+            </div>
+            <div class="dither-fade border border-dashed border-rock/25 p-6 sm:p-8 font-mono text-sm text-rock/60">
+              Articles in progress. Subscribe on
+              <a href="https://seldonfromfermi.substack.com" target="_blank" rel="noreferrer" class="underline underline-offset-4 hover:text-amber-100">Substack</a>
+              to get them first.
+            </div>
+          </div>
+        </section>
+        <section id="rust-optimizations" class="w-full border-b border-b-rock/20 scroll-mt-14">
+          <div class="container-2xl p-4 md:p-8 py-12 md:py-16 flex flex-col gap-6 md:gap-8">
+            <div class="flex flex-col gap-2 max-w-3xl">
+              <p class="font-mono text-sm uppercase tracking-[0.2em] text-amber-200/80">04/</p>
+              <h2 class="text-4xl md:text-5xl font-semibold -tracking-wide">Low-Level Rust Optimizations</h2>
+              <p class="text-lg sm:text-xl text-rock/60">Squeezing latency out of the hot path: memory layout, allocation and lock-free design.</p>
+            </div>
+            <div class="dither-fade border border-dashed border-rock/25 p-6 sm:p-8 font-mono text-sm text-rock/60">
+              Articles in progress. Subscribe on
+              <a href="https://seldonfromfermi.substack.com" target="_blank" rel="noreferrer" class="underline underline-offset-4 hover:text-amber-100">Substack</a>
+              to get them first.
             </div>
           </div>
         </section>

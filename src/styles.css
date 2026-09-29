@@ -3,6 +3,7 @@
 @theme {
 	--font-sans: "Arimo", sans-serif;
 	--font-display: "Bricolage Grotesque", sans-serif;
+	--font-mono: "JetBrains Mono", ui-monospace, monospace;
 	--screen-sm: 640px;
 	--screen-md: 768px;
 	--screen-lg: 1024px;
@@ -32,6 +33,38 @@ a {
 @layer components {
 	.glass-card {
 		@apply backdrop-brightness-80 backdrop-blur-md;
+	}
+
+	/* Pixel-grid dither that fades in from the bottom edge, echoing the hero shader */
+	.dither-fade {
+		position: relative;
+		isolation: isolate;
+	}
+
+	.dither-fade::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background-image: conic-gradient(
+			var(--color-amber-200) 25%,
+			transparent 0 50%,
+			var(--color-amber-200) 0 75%,
+			transparent 0
+		);
+		background-size: 4px 4px;
+		image-rendering: pixelated;
+		opacity: 0.08;
+		mask-image: linear-gradient(to top, black, transparent 70%);
+		transition: opacity 300ms ease-out;
+	}
+
+	.topic-card {
+		@apply backdrop-brightness-80 backdrop-blur-md;
+	}
+
+	.topic-card:hover::before {
+		opacity: 0.22;
 	}
 }
 

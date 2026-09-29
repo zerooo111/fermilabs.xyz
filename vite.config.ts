@@ -13,6 +13,10 @@ export default defineConfig({
 	},
 	build: {
 		rollupOptions: {
+			input: {
+				main: resolve(fileURLToPath(new URL(".", import.meta.url)), "index.html"),
+				research: resolve(fileURLToPath(new URL(".", import.meta.url)), "research/index.html"),
+			},
 			output: {
 				manualChunks: {
 					three: ["three"],
