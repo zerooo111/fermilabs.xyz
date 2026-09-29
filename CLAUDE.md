@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Fermilabs.xyz is a website for a research lab focused on building the future of decentralized finance. Built with HTML-first approach using vanilla JavaScript, Motion, a canvas dither animation, and Vite. Most content is in HTML for better SEO and performance, with minimal JavaScript for interactivity and animations.
+Fermilabs.xyz is a website for a research lab focused on building the future of decentralized finance. Built with HTML-first approach using vanilla JavaScript, a canvas dither animation, and Vite. Most content is in HTML for better SEO and performance, with minimal JavaScript for interactivity and animations.
 
 ## Essential Commands
 
@@ -30,9 +30,9 @@ bun run test       # Run tests with Vitest
 ### Tech Stack
 - **HTML-first**: Most content is static HTML in index.html for better SEO and initial load
 - **Vanilla JavaScript**: Minimal JS (year display, lazy loading animations)
-- **Motion** (`motion/mini`): Hero intro fade (lazy loaded)
-- **Canvas 2D**: Dithered "sequencer" field animation (lazy loaded)
-- **PostHog**: Analytics tracking
+- **CSS keyframes**: Hero intro fade (no JS, runs on first paint)
+- **Canvas 2D**: Dithered "sequencer" field (loaded when near viewport) and hero logo field (loaded on idle)
+- **PostHog**: Analytics tracking (dynamically imported after `load`, never on the critical path)
 - **Tailwind CSS v4**: Utility-first styling
 
 ### Architecture

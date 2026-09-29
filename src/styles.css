@@ -152,9 +152,8 @@ a {
 	color: var(--color-amber-200);
 	opacity: 0;
 	transform: translate(-10px, 10px) scale(0.9);
-	transition:
-		opacity 200ms ease-out,
-		transform 450ms cubic-bezier(0.34, 1.56, 0.64, 1);
+	transition: opacity 200ms ease-out, transform 450ms
+		cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .group:hover .card-arrow,
@@ -316,13 +315,20 @@ a {
 	shape-rendering: geometricPrecision;
 }
 
-/* Hidden until the intro runs; stays visible without JS or with reduced motion */
-.js [data-intro] {
-	opacity: 0;
+/* Hero intro: pure CSS so it starts on first paint without waiting for JS */
+@keyframes intro {
+	from {
+		opacity: 0;
+		transform: translateY(16px);
+	}
 }
 
-@media (prefers-reduced-motion: reduce) {
-	.js [data-intro] {
-		opacity: 1;
+@media (prefers-reduced-motion: no-preference) {
+	[data-intro] {
+		animation: intro 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+	}
+
+	[data-intro] + [data-intro] {
+		animation-delay: 0.12s;
 	}
 }

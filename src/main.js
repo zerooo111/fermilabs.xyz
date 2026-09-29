@@ -1,15 +1,4 @@
 import "./styles.css";
-import posthog from "posthog-js";
-
-// Initialize PostHog
-if (import.meta.env.VITE_PUBLIC_POSTHOG_KEY) {
-	posthog.init(import.meta.env.VITE_PUBLIC_POSTHOG_KEY, {
-		api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
-		person_profiles: "identified_only",
-		capture_pageview: true,
-		capture_pageleave: true,
-	});
-}
 
 // Set current year
 const year = document.getElementById("year");
@@ -19,27 +8,51 @@ const reducedMotion = window.matchMedia(
 	"(prefers-reduced-motion: reduce)",
 ).matches;
 
-// Lazy load animations
-const loadAnimations = async () => {
+// Run work once the browser is idle so it never competes with first paint
+const whenIdle = (fn) =>
+	"requestIdleCallback" in window
+		? requestIdleCallback(fn, { timeout: 2000 })
+		: setTimeout(fn, 200);
+
+// Load a module only when its element is near the viewport
+const whenNear = (el, fn) => {
+	const observer = new IntersectionObserver(
+		([entry]) => {
+			if (!entry.isIntersecting) return;
+			observer.disconnect();
+			fn();
+		},
+		{ rootMargin: "200px" },
+	);
+	observer.observe(el);
+};
+
+// Each animation loads independently so a slow chunk never holds up another.
+// The hero intro is pure CSS (see [data-intro] in styles.css) and needs no JS.
+const loadAnimations = () => {
 	const canvas = document.getElementById("sequencer");
 	if (canvas) {
-		try {
-			const { initSequencer } = await import("./animations/sequencer.js");
-			initSequencer(canvas, {
-				svg: document.getElementById("sequencer-items"),
-				reducedMotion,
-			});
-		} catch (error) {
-			console.error("Failed to load sequencer:", error);
-		}
+		whenNear(canvas, () =>
+			import("./animations/sequencer.js")
+				.then(({ initSequencer }) =>
+					initSequencer(canvas, {
+						svg: document.getElementById("sequencer-items"),
+						reducedMotion,
+					}),
+				)
+				.catch((error) => console.error("Failed to load sequencer:", error)),
+		);
 	}
 
 	const logoField = document.getElementById("logo-field");
 	if (logoField) {
-		// Not awaited: the source image shouldn't hold up the hero intro
-		import("./animations/logo-field.js")
-			.then(({ initLogoField }) => initLogoField(logoField, { reducedMotion }))
-			.catch((error) => console.error("Failed to load logo field:", error));
+		whenIdle(() =>
+			import("./animations/logo-field.js")
+				.then(({ initLogoField }) =>
+					initLogoField(logoField, { reducedMotion }),
+				)
+				.catch((error) => console.error("Failed to load logo field:", error)),
+		);
 	}
 
 	const cards = document.querySelectorAll(".dither-corner");
@@ -48,30 +61,11 @@ const loadAnimations = async () => {
 		!reducedMotion &&
 		window.matchMedia("(hover: hover)").matches
 	) {
-		try {
-			const { initDitherHover } = await import("./animations/dither-hover.js");
-			initDitherHover(".dither-corner");
-		} catch (error) {
-			console.error("Failed to load dither hover:", error);
-		}
-	}
-
-	const intro = document.querySelectorAll("[data-intro]");
-	if (intro.length && !reducedMotion) {
-		try {
-			const { animate } = await import("motion/mini");
-			intro.forEach((el, i) => {
-				animate(
-					el,
-					{ opacity: [0, 1], transform: ["translateY(16px)", "none"] },
-					{ duration: 0.7, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] },
-				);
-			});
-		} catch (error) {
-			// Never leave the hero hidden if Motion fails to load
-			for (const el of intro) el.style.opacity = "1";
-			console.error("Failed to load motion:", error);
-		}
+		whenIdle(() =>
+			import("./animations/dither-hover.js")
+				.then(({ initDitherHover }) => initDitherHover(".dither-corner"))
+				.catch((error) => console.error("Failed to load dither hover:", error)),
+		);
 	}
 };
 
@@ -81,19 +75,34 @@ if (document.readyState === "loading") {
 	loadAnimations();
 }
 
-// Web Vitals
-async function reportWebVitals() {
-	try {
-		const { onCLS, onINP, onFCP, onLCP, onTTFB } = await import("web-vitals");
-
-		onCLS(console.log);
-		onINP(console.log);
-		onFCP(console.log);
-		onLCP(console.log);
-		onTTFB(console.log);
-	} catch (error) {
-		console.error("Failed to load web-vitals:", error);
-	}
+// Analytics loads after the page is interactive; it's ~57KB gzipped
+if (import.meta.env.VITE_PUBLIC_POSTHOG_KEY) {
+	const initPosthog = () =>
+		whenIdle(() =>
+			import("posthog-js")
+				.then(({ default: posthog }) =>
+					posthog.init(import.meta.env.VITE_PUBLIC_POSTHOG_KEY, {
+						api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
+						person_profiles: "identified_only",
+						capture_pageview: true,
+						capture_pageleave: true,
+					}),
+				)
+				.catch((error) => console.error("Failed to load PostHog:", error)),
+		);
+	if (document.readyState === "complete") initPosthog();
+	else window.addEventListener("load", initPosthog, { once: true });
 }
 
-reportWebVitals();
+// Web Vitals (dev only)
+if (import.meta.env.DEV) {
+	import("web-vitals")
+		.then(({ onCLS, onINP, onFCP, onLCP, onTTFB }) => {
+			onCLS(console.log);
+			onINP(console.log);
+			onFCP(console.log);
+			onLCP(console.log);
+			onTTFB(console.log);
+		})
+		.catch((error) => console.error("Failed to load web-vitals:", error));
+}
