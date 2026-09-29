@@ -3,12 +3,7 @@
 // every lit cell is a particle that the pointer pushes away and a spring
 // pulls back home.
 
-const BAYER = [
-	0, 48, 12, 60, 3, 51, 15, 63, 32, 16, 44, 28, 35, 19, 47, 31, 8, 56, 4, 52,
-	11, 59, 7, 55, 40, 24, 36, 20, 43, 27, 39, 23, 2, 50, 14, 62, 1, 49, 13, 61,
-	34, 18, 46, 30, 33, 17, 45, 29, 10, 58, 6, 54, 9, 57, 5, 53, 42, 26, 38, 22,
-	41, 25, 37, 21,
-].map((v) => (v + 0.5) / 64);
+import { BAYER, createClock, packColor } from "./dither.js";
 
 // Darkest first; level 0 is left empty so the page shows through.
 const BODY = [
@@ -25,6 +20,8 @@ const CAP = [
 	[254, 230, 133],
 	[248, 247, 231],
 ];
+const BODY_PX = BODY.map(packColor);
+const CAP_PX = CAP.map(packColor);
 
 const SIZE = 112; // logo cells across
 const PAD = 16; // empty cells around the logo so pushed pixels have room
@@ -81,7 +78,7 @@ function buildParticles(img) {
 			const fy = y / SIZE;
 			v *= smoothstep(1.1, 0.3, Math.hypot(fx - 0.85, fy - 0.15));
 
-			const tones = cap ? CAP : BODY;
+			const tones = cap ? CAP_PX : BODY_PX;
 			const t = v * (tones.length - 1);
 			const lo = Math.floor(t);
 			const level = t - lo > BAYER[(y % 8) * 8 + (x % 8)] ? lo + 1 : lo;
@@ -111,7 +108,7 @@ export async function initLogoField(canvas, { reducedMotion = false } = {}) {
 	canvas.width = GRID;
 	canvas.height = GRID;
 	const image = ctx.createImageData(GRID, GRID);
-	const px = image.data;
+	const px = new Uint32Array(image.data.buffer);
 
 	function render() {
 		px.fill(0);
@@ -119,11 +116,7 @@ export async function initLogoField(canvas, { reducedMotion = false } = {}) {
 			const x = Math.round(p.x);
 			const y = Math.round(p.y);
 			if (x < 0 || y < 0 || x >= GRID || y >= GRID) continue;
-			const i = (y * GRID + x) * 4;
-			px[i] = p.c[0];
-			px[i + 1] = p.c[1];
-			px[i + 2] = p.c[2];
-			px[i + 3] = 255;
+			px[y * GRID + x] = p.c;
 		}
 		ctx.putImageData(image, 0, 0);
 	}
@@ -142,9 +135,9 @@ export async function initLogoField(canvas, { reducedMotion = false } = {}) {
 	}
 
 	let pointer = null;
-	let client = null; // latest pointer position, resolved to cells once per frame
 	let frameId = 0;
 	let running = false;
+	const clock = createClock();
 	let visible = true;
 
 	function step() {
@@ -169,17 +162,14 @@ export async function initLogoField(canvas, { reducedMotion = false } = {}) {
 		return energy;
 	}
 
-	function loop() {
-		// Read layout once per frame instead of on every pointer event
-		if (client) {
-			const rect = canvas.getBoundingClientRect();
-			const cell = rect.width / GRID;
-			pointer = {
-				x: (client.x - rect.left) / cell,
-				y: (client.y - rect.top) / cell,
-			};
+	function loop(now) {
+		const steps = clock.steps(now);
+		if (!steps) {
+			frameId = requestAnimationFrame(loop);
+			return;
 		}
-		const energy = step();
+		let energy = 0;
+		for (let i = 0; i < steps; i++) energy = step();
 		render();
 		// Sleep once everything is home and the pointer is away
 		if (!pointer && energy < particles.length * 0.02) {
@@ -199,17 +189,24 @@ export async function initLogoField(canvas, { reducedMotion = false } = {}) {
 	function wake() {
 		if (running || !visible) return;
 		running = true;
+		clock.reset();
 		frameId = requestAnimationFrame(loop);
 	}
 
 	// The canvas sits behind the hero text, so listen on the whole section
 	const area = canvas.closest("section") ?? canvas.parentElement;
+	// Layout is read in the handler, not in rAF, where it could follow the
+	// sequencer's DOM writes and force a synchronous layout
 	function onPointerMove(e) {
-		client = { x: e.clientX, y: e.clientY };
+		const rect = canvas.getBoundingClientRect();
+		const cell = rect.width / GRID;
+		pointer = {
+			x: (e.clientX - rect.left) / cell,
+			y: (e.clientY - rect.top) / cell,
+		};
 		wake();
 	}
 	function onPointerLeave() {
-		client = null;
 		pointer = null;
 	}
 

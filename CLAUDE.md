@@ -66,6 +66,7 @@ src/
   styles.css           # Tailwind imports and theme tokens
   animations/
     sequencer.js       # Canvas dither field: unordered -> sequenced transactions
+    dither.js          # Shared Bayer matrix, packed-pixel colours, fixed 60 steps/sec clock
 public/dither/         # Pre-rendered Bayer dither PNGs (section bands, footer, hover corners)
 ```
 

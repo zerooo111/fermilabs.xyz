@@ -3,12 +3,7 @@
 // The background is rendered at low resolution with an 8x8 Bayer ordered
 // dither; the transactions themselves are crisp SVG squares on top.
 
-const BAYER = [
-	0, 48, 12, 60, 3, 51, 15, 63, 32, 16, 44, 28, 35, 19, 47, 31, 8, 56, 4, 52,
-	11, 59, 7, 55, 40, 24, 36, 20, 43, 27, 39, 23, 2, 50, 14, 62, 1, 49, 13, 61,
-	34, 18, 46, 30, 33, 17, 45, 29, 10, 58, 6, 54, 9, 57, 5, 53, 42, 26, 38, 22,
-	41, 25, 37, 21,
-].map((v) => (v + 0.5) / 64);
+import { BAYER, createClock, packColor } from "./dither.js";
 
 // Forest tones, darkest first. The first one matches the page background.
 const TONES = [
@@ -17,6 +12,7 @@ const TONES = [
 	[63, 129, 80],
 	[180, 220, 120],
 ];
+const TONE_PX = TONES.map(packColor);
 
 const CELL = 3; // CSS pixels per field cell
 const MAX_LANES = 5;
@@ -49,6 +45,11 @@ export function initSequencer(canvas, { svg, reducedMotion = false } = {}) {
 	let h = 0;
 	let field;
 	let image;
+	let pixels; // Uint32 view of image.data
+	let fogX; // per-frame fog terms, see render()
+	let fogY;
+	let fogD;
+	let box; // chip bounds, fixed until the next resize
 	let particles = [];
 	let lanes = MAX_LANES;
 	let laneY = [];
@@ -58,15 +59,15 @@ export function initSequencer(canvas, { svg, reducedMotion = false } = {}) {
 	let transit = 0; // frames from entering on the left to release
 	let chipEls = null;
 	let pointer = null;
-	let client = null; // latest pointer position, resolved to cells once per frame
 	let frameId = 0;
 	let time = 0;
+	const clock = createClock();
 
 	const gateX = () => w * GATE;
 
 	// The sequencer is drawn as a chip centred on the gate. Transactions
 	// wait at its input pins, cross under its body and exit its output pins.
-	function chip() {
+	function measureChip() {
 		const cw = Math.min(40, Math.max(20, w * 0.09));
 		return {
 			left: gateX() - cw / 2,
@@ -76,6 +77,7 @@ export function initSequencer(canvas, { svg, reducedMotion = false } = {}) {
 			bottom: h,
 		};
 	}
+	const chip = () => box;
 	const laneStart = () => chip().left - PIN;
 	const waitX = () => laneStart() - 3;
 
@@ -129,10 +131,15 @@ export function initSequencer(canvas, { svg, reducedMotion = false } = {}) {
 		if (nw === w && nh === h) return;
 		w = nw;
 		h = nh;
+		box = measureChip();
 		canvas.width = w;
 		canvas.height = h;
 		field = new Float32Array(w * h);
 		image = ctx.createImageData(w, h);
+		pixels = new Uint32Array(image.data.buffer);
+		fogX = new Float32Array(w);
+		fogY = new Float32Array(h);
+		fogD = new Float32Array(w + h);
 
 		// Fewer lanes in short fields
 		lanes = Math.max(
@@ -182,6 +189,7 @@ export function initSequencer(canvas, { svg, reducedMotion = false } = {}) {
 					p.el.setAttribute("class", "seq-item");
 					p.drawnState = null;
 					p.drawnSize = null;
+					p.drawnTransform = null;
 					return p.el;
 				}),
 			);
@@ -274,7 +282,16 @@ export function initSequencer(canvas, { svg, reducedMotion = false } = {}) {
 			g,
 		);
 
-		chipEls = { inPins, outPins, hand, cx: px(cx), cy: px(clockY) };
+		chipEls = {
+			inPins,
+			outPins,
+			hand,
+			cx: px(cx),
+			cy: px(clockY),
+			waiting: [],
+			leaving: [],
+			handDrawn: null,
+		};
 	}
 
 	function drawChip() {
@@ -291,16 +308,24 @@ export function initSequencer(canvas, { svg, reducedMotion = false } = {}) {
 				leaving[p.lane] = true;
 			}
 		}
+		// Only touch the DOM when a pin actually changes state
 		for (let lane = 0; lane < lanes; lane++) {
-			chipEls.inPins[lane].classList.toggle("is-waiting", waiting[lane]);
-			chipEls.outPins[lane].classList.toggle("is-leaving", leaving[lane]);
+			if (chipEls.waiting[lane] !== waiting[lane]) {
+				chipEls.inPins[lane].classList.toggle("is-waiting", waiting[lane]);
+				chipEls.waiting[lane] = waiting[lane];
+			}
+			if (chipEls.leaving[lane] !== leaving[lane]) {
+				chipEls.outPins[lane].classList.toggle("is-leaving", leaving[lane]);
+				chipEls.leaving[lane] = leaving[lane];
+			}
 		}
 		// One full turn every four releases
 		const angle = ((time / (PERIOD * 4)) * 360) % 360;
-		chipEls.hand.setAttribute(
-			"transform",
-			`translate(${chipEls.cx} ${chipEls.cy}) rotate(${angle.toFixed(1)})`,
-		);
+		const hand = `translate(${chipEls.cx} ${chipEls.cy}) rotate(${angle.toFixed(1)})`;
+		if (chipEls.handDrawn !== hand) {
+			chipEls.hand.setAttribute("transform", hand);
+			chipEls.handDrawn = hand;
+		}
 	}
 
 	function splat(cx, cy, r, strength) {
@@ -416,14 +441,20 @@ export function initSequencer(canvas, { svg, reducedMotion = false } = {}) {
 		field.fill(0);
 		const edge = Math.max(1, laneStart());
 
-		// Slow fog on the unordered side, fading out toward the chip
+		// Slow fog on the unordered side, fading out toward the chip. Each term
+		// depends only on x, y or x + y, so it's computed per column, row and
+		// diagonal rather than three trig calls per cell.
+		for (let x = 0; x < edge; x++) fogX[x] = Math.sin(x * 0.05 + time * 0.01);
+		for (let y = 0; y < h; y++) fogY[y] = Math.cos(y * 0.07 - time * 0.008);
+		for (let d = 0; d < edge + h; d++) {
+			fogD[d] = Math.sin(d * 0.03 + time * 0.006);
+		}
 		for (let y = 0; y < h; y++) {
+			const row = y * w;
+			const fy = fogY[y];
 			for (let x = 0; x < edge; x++) {
-				const fade = 1 - x / edge;
-				const n =
-					Math.sin(x * 0.05 + time * 0.01) * Math.cos(y * 0.07 - time * 0.008) +
-					Math.sin((x + y) * 0.03 + time * 0.006);
-				field[y * w + x] = (0.12 + n * 0.06) * fade;
+				const n = fogX[x] * fy + fogD[x + y];
+				field[row + x] = (0.12 + n * 0.06) * (1 - x / edge);
 			}
 		}
 
@@ -433,23 +464,18 @@ export function initSequencer(canvas, { svg, reducedMotion = false } = {}) {
 		}
 		if (pointer) splat(pointer.x, pointer.y, 7, 0.35);
 
-		const data = image.data;
 		const levels = TONES.length - 1;
 		for (let y = 0; y < h; y++) {
+			const bayerRow = (y & 7) * 8;
 			for (let x = 0; x < w; x++) {
 				const i = y * w + x;
 				const v = Math.min(1, field[i]) * levels;
 				const base = Math.floor(v);
 				const tone = Math.min(
 					levels,
-					base + (v - base > BAYER[(y & 7) * 8 + (x & 7)] ? 1 : 0),
+					base + (v - base > BAYER[bayerRow + (x & 7)] ? 1 : 0),
 				);
-				const c = TONES[tone];
-				const o = i * 4;
-				data[o] = c[0];
-				data[o + 1] = c[1];
-				data[o + 2] = c[2];
-				data[o + 3] = 255;
+				pixels[i] = TONE_PX[tone];
 			}
 		}
 		ctx.putImageData(image, 0, 0);
@@ -477,34 +503,36 @@ export function initSequencer(canvas, { svg, reducedMotion = false } = {}) {
 				el.setAttribute("height", p.size);
 				p.drawnSize = p.size;
 			}
-			el.setAttribute(
-				"transform",
-				`translate(${(p.x * CELL).toFixed(1)} ${(p.y * CELL).toFixed(1)}) rotate(${p.angle.toFixed(1)})`,
-			);
+			// Settled squares repeat the same transform; skip those writes
+			const transform = `translate(${(p.x * CELL).toFixed(1)} ${(p.y * CELL).toFixed(1)}) rotate(${p.angle.toFixed(1)})`;
+			if (p.drawnTransform !== transform) {
+				el.setAttribute("transform", transform);
+				p.drawnTransform = transform;
+			}
 		}
 	}
 
-	function loop() {
-		// Read layout at the start of the frame, before this frame's SVG writes,
-		// so it never forces a reflow
-		if (client) {
-			const rect = canvas.getBoundingClientRect();
-			pointer = {
-				x: (client.x - rect.left) / CELL,
-				y: (client.y - rect.top) / CELL,
-			};
-		}
-		step();
-		render();
+	function loop(now) {
 		frameId = requestAnimationFrame(loop);
+		const steps = clock.steps(now);
+		if (!steps) return;
+		for (let i = 0; i < steps; i++) step();
+		render();
 	}
 
+	// Input is dispatched before rAF callbacks, while layout is still clean
+	// from the last frame, so reading the rect here is cheap. Reading it in a
+	// rAF callback can run after another animation's DOM writes and force a
+	// synchronous layout.
 	function onPointerMove(e) {
-		client = { x: e.clientX, y: e.clientY };
+		const rect = canvas.getBoundingClientRect();
+		pointer = {
+			x: (e.clientX - rect.left) / CELL,
+			y: (e.clientY - rect.top) / CELL,
+		};
 	}
 
 	function onPointerLeave() {
-		client = null;
 		pointer = null;
 	}
 
@@ -534,7 +562,10 @@ export function initSequencer(canvas, { svg, reducedMotion = false } = {}) {
 	// Only animate while visible
 	const observer = new IntersectionObserver(([entry]) => {
 		cancelAnimationFrame(frameId);
-		if (entry.isIntersecting) frameId = requestAnimationFrame(loop);
+		if (entry.isIntersecting) {
+			clock.reset();
+			frameId = requestAnimationFrame(loop);
+		}
 	});
 	observer.observe(canvas);
 
