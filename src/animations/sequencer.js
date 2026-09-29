@@ -58,6 +58,7 @@ export function initSequencer(canvas, { svg, reducedMotion = false } = {}) {
 	let transit = 0; // frames from entering on the left to release
 	let chipEls = null;
 	let pointer = null;
+	let client = null; // latest pointer position, resolved to cells once per frame
 	let frameId = 0;
 	let time = 0;
 
@@ -120,10 +121,14 @@ export function initSequencer(canvas, { svg, reducedMotion = false } = {}) {
 		return p;
 	}
 
-	function resize() {
-		const rect = canvas.getBoundingClientRect();
-		w = Math.max(1, Math.ceil(rect.width / CELL));
-		h = Math.max(1, Math.ceil(rect.height / CELL));
+	function resize(rect = canvas.getBoundingClientRect()) {
+		const nw = Math.max(1, Math.ceil(rect.width / CELL));
+		const nh = Math.max(1, Math.ceil(rect.height / CELL));
+		// Rebuilding resets the simulation and the SVG, so skip it unless the
+		// grid actually changed
+		if (nw === w && nh === h) return;
+		w = nw;
+		h = nh;
 		canvas.width = w;
 		canvas.height = h;
 		field = new Float32Array(w * h);
@@ -480,20 +485,26 @@ export function initSequencer(canvas, { svg, reducedMotion = false } = {}) {
 	}
 
 	function loop() {
+		// Read layout at the start of the frame, before this frame's SVG writes,
+		// so it never forces a reflow
+		if (client) {
+			const rect = canvas.getBoundingClientRect();
+			pointer = {
+				x: (client.x - rect.left) / CELL,
+				y: (client.y - rect.top) / CELL,
+			};
+		}
 		step();
 		render();
 		frameId = requestAnimationFrame(loop);
 	}
 
 	function onPointerMove(e) {
-		const rect = canvas.getBoundingClientRect();
-		pointer = {
-			x: (e.clientX - rect.left) / CELL,
-			y: (e.clientY - rect.top) / CELL,
-		};
+		client = { x: e.clientX, y: e.clientY };
 	}
 
 	function onPointerLeave() {
+		client = null;
 		pointer = null;
 	}
 
@@ -503,13 +514,21 @@ export function initSequencer(canvas, { svg, reducedMotion = false } = {}) {
 		// Settle the simulation, then draw a single still frame
 		for (let i = 0; i < 240; i++) step();
 		render();
+		// Settling is expensive, so do it at most once per frame while resizing
 		const onResize = () => {
-			resize();
-			for (let i = 0; i < 240; i++) step();
-			render();
+			if (frameId) return;
+			frameId = requestAnimationFrame(() => {
+				frameId = 0;
+				resize();
+				for (let i = 0; i < 240; i++) step();
+				render();
+			});
 		};
 		window.addEventListener("resize", onResize);
-		return () => window.removeEventListener("resize", onResize);
+		return () => {
+			cancelAnimationFrame(frameId);
+			window.removeEventListener("resize", onResize);
+		};
 	}
 
 	// Only animate while visible
@@ -519,7 +538,10 @@ export function initSequencer(canvas, { svg, reducedMotion = false } = {}) {
 	});
 	observer.observe(canvas);
 
-	const resizeObserver = new ResizeObserver(() => resize());
+	// contentRect avoids a layout read; unchanged grids are ignored in resize()
+	const resizeObserver = new ResizeObserver(([entry]) =>
+		resize(entry.contentRect),
+	);
 	resizeObserver.observe(canvas);
 	canvas.addEventListener("pointermove", onPointerMove);
 	canvas.addEventListener("pointerleave", onPointerLeave);

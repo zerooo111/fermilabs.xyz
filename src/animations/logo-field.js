@@ -44,13 +44,12 @@ function lightness(r, g, b) {
 	return (Math.max(r, g, b) + Math.min(r, g, b)) / 510;
 }
 
-function loadImage(src) {
-	return new Promise((resolve, reject) => {
-		const img = new Image();
-		img.onload = () => resolve(img);
-		img.onerror = reject;
-		img.src = src;
-	});
+// decode() decodes off the main thread so drawImage doesn't have to
+async function loadImage(src) {
+	const img = new Image();
+	img.src = src;
+	await img.decode();
+	return img;
 }
 
 // Turn the source image into dithered particles with a home cell and colour.
@@ -143,6 +142,7 @@ export async function initLogoField(canvas, { reducedMotion = false } = {}) {
 	}
 
 	let pointer = null;
+	let client = null; // latest pointer position, resolved to cells once per frame
 	let frameId = 0;
 	let running = false;
 	let visible = true;
@@ -170,6 +170,15 @@ export async function initLogoField(canvas, { reducedMotion = false } = {}) {
 	}
 
 	function loop() {
+		// Read layout once per frame instead of on every pointer event
+		if (client) {
+			const rect = canvas.getBoundingClientRect();
+			const cell = rect.width / GRID;
+			pointer = {
+				x: (client.x - rect.left) / cell,
+				y: (client.y - rect.top) / cell,
+			};
+		}
 		const energy = step();
 		render();
 		// Sleep once everything is home and the pointer is away
@@ -196,15 +205,11 @@ export async function initLogoField(canvas, { reducedMotion = false } = {}) {
 	// The canvas sits behind the hero text, so listen on the whole section
 	const area = canvas.closest("section") ?? canvas.parentElement;
 	function onPointerMove(e) {
-		const rect = canvas.getBoundingClientRect();
-		const cell = rect.width / GRID;
-		pointer = {
-			x: (e.clientX - rect.left) / cell,
-			y: (e.clientY - rect.top) / cell,
-		};
+		client = { x: e.clientX, y: e.clientY };
 		wake();
 	}
 	function onPointerLeave() {
+		client = null;
 		pointer = null;
 	}
 
@@ -219,7 +224,6 @@ export async function initLogoField(canvas, { reducedMotion = false } = {}) {
 	observer.observe(canvas);
 	area.addEventListener("pointermove", onPointerMove);
 	area.addEventListener("pointerleave", onPointerLeave);
-	render();
 	wake();
 
 	return () => {

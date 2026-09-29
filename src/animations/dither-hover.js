@@ -26,13 +26,9 @@ const BLOBS = [
 ];
 
 function attach(card) {
-	const canvas = document.createElement("canvas");
-	canvas.className = "dither-hover-canvas";
-	canvas.setAttribute("aria-hidden", "true");
-	card.prepend(canvas);
-	card.classList.add("has-dither-canvas");
-
-	const ctx = canvas.getContext("2d");
+	// Created on first hover so cards that are never hovered cost nothing
+	let canvas;
+	let ctx;
 	let w = 0;
 	let h = 0;
 	let image;
@@ -42,16 +38,37 @@ function attach(card) {
 	let hovered = false;
 	let px = 0;
 	let py = 0;
+	let client = null; // latest pointer position, resolved once per frame
 	// Where the pointer-led blob currently sits, eased toward the pointer
 	let lead = { x: 0.5, y: 0.5 };
 
-	function size() {
-		const rect = card.getBoundingClientRect();
-		w = Math.max(1, Math.ceil(rect.width / CELL));
-		h = Math.max(1, Math.ceil(rect.height / CELL));
+	function size(rect) {
+		if (!canvas) {
+			canvas = document.createElement("canvas");
+			canvas.className = "dither-hover-canvas";
+			canvas.setAttribute("aria-hidden", "true");
+			card.prepend(canvas);
+			card.classList.add("has-dither-canvas");
+			ctx = canvas.getContext("2d");
+		}
+		const nw = Math.max(1, Math.ceil(rect.width / CELL));
+		const nh = Math.max(1, Math.ceil(rect.height / CELL));
+		if (nw === w && nh === h) return;
+		w = nw;
+		h = nh;
 		canvas.width = w;
 		canvas.height = h;
 		image = ctx.createImageData(w, h);
+	}
+
+	// Layout is read here, at the start of the frame, never in event handlers
+	function track() {
+		const rect = card.getBoundingClientRect();
+		size(rect);
+		if (client) {
+			px = (client.x - rect.left) / CELL;
+			py = (client.y - rect.top) / CELL;
+		}
 	}
 
 	function render() {
@@ -102,6 +119,7 @@ function attach(card) {
 	}
 
 	function loop() {
+		track();
 		time += 1;
 		amp += ((hovered ? 1 : 0) - amp) * 0.12;
 		render();
@@ -114,21 +132,21 @@ function attach(card) {
 		frameId = requestAnimationFrame(loop);
 	}
 
-	function track(e) {
-		const rect = card.getBoundingClientRect();
-		px = (e.clientX - rect.left) / CELL;
-		py = (e.clientY - rect.top) / CELL;
-	}
-
 	card.addEventListener("pointerenter", (e) => {
 		if (e.pointerType === "touch") return;
-		size();
-		track(e);
-		if (!frameId) lead = { x: px / w, y: py / h };
+		client = { x: e.clientX, y: e.clientY };
 		hovered = true;
-		if (!frameId) frameId = requestAnimationFrame(loop);
+		if (frameId) return;
+		frameId = requestAnimationFrame(() => {
+			// Start the lead blob under the pointer rather than easing in from centre
+			track();
+			lead = { x: px / w, y: py / h };
+			loop();
+		});
 	});
-	card.addEventListener("pointermove", track);
+	card.addEventListener("pointermove", (e) => {
+		client = { x: e.clientX, y: e.clientY };
+	});
 	card.addEventListener("pointerleave", () => {
 		hovered = false;
 	});
