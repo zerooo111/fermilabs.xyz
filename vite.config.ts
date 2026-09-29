@@ -19,8 +19,6 @@ export default defineConfig({
 			},
 			output: {
 				manualChunks: {
-					three: ["three"],
-					gsap: ["gsap"],
 					posthog: ["posthog-js"],
 				},
 			},

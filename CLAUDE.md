@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Fermilabs.xyz is a website for a research lab focused on building the future of decentralized finance. Built with HTML-first approach using vanilla JavaScript, GSAP, Three.js, and Vite. Most content is in HTML for better SEO and performance, with minimal JavaScript for interactivity and animations.
+Fermilabs.xyz is a website for a research lab focused on building the future of decentralized finance. Built with HTML-first approach using vanilla JavaScript, Motion, a canvas dither animation, and Vite. Most content is in HTML for better SEO and performance, with minimal JavaScript for interactivity and animations.
 
 ## Essential Commands
 
@@ -29,24 +29,24 @@ bun run test       # Run tests with Vitest
 
 ### Tech Stack
 - **HTML-first**: Most content is static HTML in index.html for better SEO and initial load
-- **Vanilla JavaScript**: Minimal JS for interactivity (mobile menu, year display)
-- **GSAP**: Text shuffle animations with ScrollTrigger and SplitText (lazy loaded)
-- **Three.js**: WebGL dither effect background (lazy loaded)
+- **Vanilla JavaScript**: Minimal JS (year display, lazy loading animations)
+- **Motion** (`motion/mini`): Hero intro fade (lazy loaded)
+- **Canvas 2D**: Dithered "sequencer" field animation (lazy loaded)
 - **PostHog**: Analytics tracking
 - **Tailwind CSS v4**: Utility-first styling
 
 ### Architecture
-- **HTML-first approach**: All content structure is in index.html
+- **HTML-first approach**: All content structure is in index.html and research/index.html
 - **Progressive enhancement**: JavaScript enhances the experience but isn't required
-- **Lazy loading**: Animations (GSAP, Three.js) are loaded on demand to reduce initial bundle
-- **Minimal JS**: Only ~4KB initial JS for menu toggle and basic setup
+- **Lazy loading**: Animations are loaded on demand to reduce initial bundle
+- **Minimal JS**: Only ~4KB initial JS for basic setup
 - **Code splitting**: Animations are separate chunks loaded asynchronously
 
 ### Styling
 - Tailwind CSS v4 with Vite plugin
 - Custom fonts loaded via Google Fonts:
-  - Sans: "Arimo"
-  - Display: "Bricolage Grotesque"
+  - Serif (headlines, reading): "Newsreader"
+  - Sans (UI, body): "Hanken Grotesk"
 - Use Tailwind utility classes for styling
 
 ### Path Aliases
@@ -59,18 +59,18 @@ bun run test       # Run tests with Vitest
 
 ### File Structure
 ```
-index.html              # Main HTML file with all content
+index.html              # Landing page
+research/index.html     # Research page: Substack articles grouped by topic
 src/
-  main.js              # Entry point (~4KB) - menu toggle, year, lazy loads animations
-  styles.css           # Tailwind imports
+  main.js              # Entry point - year, lazy loads animations
+  styles.css           # Tailwind imports and theme tokens
   animations/
-    shuffle.js         # GSAP text shuffle animation (lazy loaded)
-    dither.js          # Three.js dither background effect (lazy loaded)
+    sequencer.js       # Canvas dither field: unordered -> sequenced transactions
+public/dither/         # Pre-rendered Bayer dither PNGs (section bands, footer, hover corners)
 ```
 
 ### Key Features
-- **Mobile menu**: Animated hamburger menu with CSS transitions
-- **Text shuffle**: GSAP-powered text animation on scroll and hover
-- **Dither effect**: Three.js WebGL background with wave patterns and mouse interaction
-- **Lazy loaded animations**: GSAP and Three.js only load when needed
+- **Sequencer field**: Bayer-dithered canvas where transactions drift in, queue at a gate and leave in FIFO lanes; reacts to the pointer, pauses offscreen, renders a still frame for reduced motion
+- **Layout**: Pages sit in a `.frame` (1280px, ruled sides); sections are separated by rules with `.reg` registration marks. Illustrations are inline blueprint SVGs styled by `.bp`
+- **Research page**: Articles are hardcoded; add new Substack posts to research/index.html and update counts on the landing page
 

@@ -12,70 +12,69 @@ if (import.meta.env.VITE_PUBLIC_POSTHOG_KEY) {
 }
 
 // Set current year
-document.getElementById("year").textContent = new Date().getFullYear();
+const year = document.getElementById("year");
+if (year) year.textContent = String(new Date().getFullYear());
 
-// Mobile menu toggle
-const mobileMenuBtn = document.getElementById("mobile-menu-btn");
-const mobileMenu = document.getElementById("mobile-menu");
-const menuLines = document.querySelectorAll(".menu-line-1, .menu-line-2, .menu-line-3");
-
-let isMobileMenuOpen = false;
-
-mobileMenuBtn?.addEventListener("click", () => {
-	isMobileMenuOpen = !isMobileMenuOpen;
-
-	if (isMobileMenuOpen) {
-		mobileMenu.classList.remove("hidden");
-		menuLines[0].classList.add("rotate-45", "translate-y-1.5");
-		menuLines[1].classList.add("opacity-0");
-		menuLines[2].classList.add("-rotate-45", "-translate-y-1.5");
-	} else {
-		mobileMenu.classList.add("hidden");
-		menuLines[0].classList.remove("rotate-45", "translate-y-1.5");
-		menuLines[1].classList.remove("opacity-0");
-		menuLines[2].classList.remove("-rotate-45", "-translate-y-1.5");
-	}
-});
-
-// Close mobile menu when clicking a link
-mobileMenu?.querySelectorAll("a").forEach((link) => {
-	link.addEventListener("click", () => {
-		isMobileMenuOpen = false;
-		mobileMenu.classList.add("hidden");
-		menuLines[0].classList.remove("rotate-45", "translate-y-1.5");
-		menuLines[1].classList.remove("opacity-0");
-		menuLines[2].classList.remove("-rotate-45", "-translate-y-1.5");
-	});
-});
+const reducedMotion = window.matchMedia(
+	"(prefers-reduced-motion: reduce)",
+).matches;
 
 // Lazy load animations
 const loadAnimations = async () => {
-	try {
-		const { initDither } = await import("./animations/dither.js");
-		const { initDecrypt } = await import("./animations/decrypt.js");
+	const canvas = document.getElementById("sequencer");
+	if (canvas) {
+		try {
+			const { initSequencer } = await import("./animations/sequencer.js");
+			initSequencer(canvas, {
+				svg: document.getElementById("sequencer-items"),
+				reducedMotion,
+			});
+		} catch (error) {
+			console.error("Failed to load sequencer:", error);
+		}
+	}
 
-		// Initialize dither background
-		initDither("dither-bg");
+	const logoField = document.getElementById("logo-field");
+	if (logoField) {
+		// Not awaited: the source image shouldn't hold up the hero intro
+		import("./animations/logo-field.js")
+			.then(({ initLogoField }) => initLogoField(logoField, { reducedMotion }))
+			.catch((error) => console.error("Failed to load logo field:", error));
+	}
 
-		// Initialize decrypt animation on hero text
-		// Animation triggers on first render and repeats every 5 seconds
-		initDecrypt(".hero-decrypt", {
-			speed: 100, // Time between character updates in ms
-			sequential: true, // Reveal one character at a time
-			revealDirection: "start", // Reveal from start to end
-			useOriginalCharsOnly: false, // Use random characters
-			characters:
-				"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()_+",
-			encryptedClass: "text-rock/50", // Encrypted character styling
-			revealedClass: "", // Revealed character styling (uses default)
-			repeatInterval: 5000, // Repeat every 5 seconds
-		});
-	} catch (error) {
-		console.error("Failed to load animations:", error);
+	const cards = document.querySelectorAll(".dither-corner");
+	if (
+		cards.length &&
+		!reducedMotion &&
+		window.matchMedia("(hover: hover)").matches
+	) {
+		try {
+			const { initDitherHover } = await import("./animations/dither-hover.js");
+			initDitherHover(".dither-corner");
+		} catch (error) {
+			console.error("Failed to load dither hover:", error);
+		}
+	}
+
+	const intro = document.querySelectorAll("[data-intro]");
+	if (intro.length && !reducedMotion) {
+		try {
+			const { animate } = await import("motion/mini");
+			intro.forEach((el, i) => {
+				animate(
+					el,
+					{ opacity: [0, 1], transform: ["translateY(16px)", "none"] },
+					{ duration: 0.7, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] },
+				);
+			});
+		} catch (error) {
+			// Never leave the hero hidden if Motion fails to load
+			for (const el of intro) el.style.opacity = "1";
+			console.error("Failed to load motion:", error);
+		}
 	}
 };
 
-// Load animations when page is loaded
 if (document.readyState === "loading") {
 	document.addEventListener("DOMContentLoaded", loadAnimations);
 } else {
