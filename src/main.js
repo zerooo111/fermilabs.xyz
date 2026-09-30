@@ -38,6 +38,7 @@ const loadAnimations = () => {
 					initSequencer(canvas, {
 						svg: document.getElementById("sequencer-items"),
 						reducedMotion,
+						lowPower: window.matchMedia("(pointer: coarse)").matches,
 					}),
 				)
 				.catch((error) => console.error("Failed to load sequencer:", error)),

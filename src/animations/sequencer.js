@@ -37,7 +37,10 @@ function rand(min, max) {
 	return min + Math.random() * (max - min);
 }
 
-export function initSequencer(canvas, { svg, reducedMotion = false } = {}) {
+export function initSequencer(
+	canvas,
+	{ svg, reducedMotion = false, lowPower = false } = {},
+) {
 	const ctx = canvas.getContext("2d");
 	if (!ctx) return () => {};
 
@@ -512,11 +515,17 @@ export function initSequencer(canvas, { svg, reducedMotion = false } = {}) {
 		}
 	}
 
+	// Phones draw every other step: the simulation keeps full speed, only
+	// the drawing (and its SVG writes) halves to 30fps
+	const minSteps = lowPower ? 2 : 1;
+	let pending = 0;
+
 	function loop(now) {
 		frameId = requestAnimationFrame(loop);
-		const steps = clock.steps(now);
-		if (!steps) return;
-		for (let i = 0; i < steps; i++) step();
+		pending += clock.steps(now);
+		if (pending < minSteps) return;
+		for (let i = 0; i < pending; i++) step();
+		pending = 0;
 		render();
 	}
 
@@ -525,6 +534,8 @@ export function initSequencer(canvas, { svg, reducedMotion = false } = {}) {
 	// rAF callback can run after another animation's DOM writes and force a
 	// synchronous layout.
 	function onPointerMove(e) {
+		// A finger on the field is a scroll, not a pointer to dodge
+		if (e.pointerType === "touch") return;
 		const rect = canvas.getBoundingClientRect();
 		pointer = {
 			x: (e.clientX - rect.left) / CELL,
@@ -564,6 +575,7 @@ export function initSequencer(canvas, { svg, reducedMotion = false } = {}) {
 		cancelAnimationFrame(frameId);
 		if (entry.isIntersecting) {
 			clock.reset();
+			pending = 0;
 			frameId = requestAnimationFrame(loop);
 		}
 	});

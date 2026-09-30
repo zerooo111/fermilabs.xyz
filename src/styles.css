@@ -126,9 +126,15 @@ a {
 	transition: opacity 200ms ease-out;
 }
 
-.dither-corner:hover::after,
 .dither-corner:focus-visible::after {
 	opacity: 1;
+}
+
+/* Touch browsers keep :hover stuck after a tap, so only real hovers count */
+@media (hover: hover) {
+	.dither-corner:hover::after {
+		opacity: 1;
+	}
 }
 
 /* With JS, hover gets a live pulsating dither canvas instead of the corner */
@@ -156,14 +162,20 @@ a {
 		cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.group:hover .card-arrow,
 .group:focus-visible .card-arrow {
 	opacity: 1;
 	transform: none;
 }
 
-.group:hover .card-arrow path {
-	animation: arrow-nudge 1.4s ease-in-out 450ms infinite;
+@media (hover: hover) {
+	.group:hover .card-arrow {
+		opacity: 1;
+		transform: none;
+	}
+
+	.group:hover .card-arrow path {
+		animation: arrow-nudge 1.4s ease-in-out 450ms infinite;
+	}
 }
 
 @keyframes arrow-nudge {
@@ -252,6 +264,19 @@ a {
 		#000 88%,
 		transparent
 	);
+}
+
+/* Film grain over the whole page; soft-light also deepens the greens.
+   The tile is the old live feTurbulence filter rendered once at 2x
+   (fractalNoise 0.9, 4 octaves, stitched), so it looks the same without
+   phones re-rasterising the filter while they scroll. */
+.noise-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 30;
+	pointer-events: none;
+	background: url("/noise.png") repeat 0 0 / 256px 256px;
+	mix-blend-mode: soft-light;
 }
 
 /* Transactions in the sequencer field */

@@ -198,6 +198,8 @@ export async function initLogoField(canvas, { reducedMotion = false } = {}) {
 	// Layout is read in the handler, not in rAF, where it could follow the
 	// sequencer's DOM writes and force a synchronous layout
 	function onPointerMove(e) {
+		// A finger on the hero is a scroll, not a pointer to dodge
+		if (e.pointerType === "touch") return;
 		const rect = canvas.getBoundingClientRect();
 		const cell = rect.width / GRID;
 		pointer = {
